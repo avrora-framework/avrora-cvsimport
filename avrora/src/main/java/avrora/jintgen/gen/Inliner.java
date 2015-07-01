@@ -32,13 +32,24 @@
 
 package avrora.jintgen.gen;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
 import avrora.cck.util.Util;
 import avrora.jintgen.isdl.ArchDecl;
 import avrora.jintgen.isdl.SubroutineDecl;
 import avrora.jintgen.isdl.parser.ISDLParserConstants;
 import avrora.jintgen.isdl.parser.Token;
-import avrora.jintgen.jigir.*;
-import java.util.*;
+import avrora.jintgen.jigir.AssignStmt;
+import avrora.jintgen.jigir.CallExpr;
+import avrora.jintgen.jigir.CallStmt;
+import avrora.jintgen.jigir.DeclStmt;
+import avrora.jintgen.jigir.Expr;
+import avrora.jintgen.jigir.ReturnStmt;
+import avrora.jintgen.jigir.Stmt;
+import avrora.jintgen.jigir.StmtRebuilder;
+import avrora.jintgen.jigir.VarExpr;
 
 /**
  * The <code>Inliner</code> class implements a visitor over the code that
@@ -111,6 +122,7 @@ public class Inliner extends StmtRebuilder<Object>
     }
 
 
+    @Override
     public Stmt visit(CallStmt s, Object env)
     {
         SubroutineDecl d = archDecl.getSubroutine(s.method.image);
@@ -125,12 +137,14 @@ public class Inliner extends StmtRebuilder<Object>
     }
 
 
+    @Override
     public Stmt visit(AssignStmt s, Object env)
     {
         throw Util.unimplemented();
     }
 
 
+    @Override
     public Stmt visit(DeclStmt s, Object env)
     {
         String nv = newTemp(s.name.image);
@@ -139,6 +153,7 @@ public class Inliner extends StmtRebuilder<Object>
     }
 
 
+    @Override
     public Stmt visit(ReturnStmt s, Object env)
     {
         if (context.curSubroutine == null)
@@ -188,6 +203,7 @@ public class Inliner extends StmtRebuilder<Object>
     }
 
 
+    @Override
     public Expr visit(CallExpr v, Object env)
     {
         SubroutineDecl d = archDecl.getSubroutine(v.method.image);
@@ -208,6 +224,7 @@ public class Inliner extends StmtRebuilder<Object>
     }
 
 
+    @Override
     public Expr visit(VarExpr v, Object env)
     {
         // alpha rename all variables

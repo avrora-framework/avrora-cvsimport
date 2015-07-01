@@ -34,12 +34,21 @@
 
 package avrora.jintgen.jigir;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+
 import avrora.jintgen.isdl.EnumDecl;
 import avrora.jintgen.isdl.OperandTypeDecl;
 import avrora.jintgen.isdl.parser.Token;
 import avrora.jintgen.isdl.verifier.JIGIRErrorReporter;
-import avrora.jintgen.types.*;
-import java.util.*;
+import avrora.jintgen.types.ParamDimension;
+import avrora.jintgen.types.SignDimension;
+import avrora.jintgen.types.SizeDimension;
+import avrora.jintgen.types.Type;
+import avrora.jintgen.types.TypeCon;
+import avrora.jintgen.types.TypeEnv;
+import avrora.jintgen.types.TypeRef;
 
 /**
  * The <code>JIGIRTypeEnv</code> class represents a type environment for JIGIR
@@ -83,6 +92,7 @@ public class JIGIRTypeEnv extends TypeEnv
         }
 
 
+        @Override
         public Type newType(TypeEnv te, HashMap<String, List<Object>> dims)
         {
             HashMap<String, Object> dimInst = buildDimensions(te, dims);
@@ -129,6 +139,7 @@ public class JIGIRTypeEnv extends TypeEnv
         }
 
 
+        @Override
         public Type newType(TypeEnv te, HashMap<String, List<Object>> dims)
         {
             HashMap<String, Object> dimInst = buildDimensions(te, dims);
@@ -193,6 +204,7 @@ public class JIGIRTypeEnv extends TypeEnv
         }
 
 
+        @Override
         public String toString()
         {
             return (signed ? "-int." : "+int.") + size;
@@ -237,6 +249,7 @@ public class JIGIRTypeEnv extends TypeEnv
         }
 
 
+        @Override
         public String toString()
         {
             return (relative ? "-address." : "address.") + align;
@@ -422,7 +435,10 @@ public class JIGIRTypeEnv extends TypeEnv
     {
         TypeCon tc = resolveTypeCon(tok.image);
         if (tc == null)
+        {
             ERROR.UnresolvedType(tok);
+            throw new IllegalStateException("unresolved type");
+        }
         return tc.newType(this);
     }
 

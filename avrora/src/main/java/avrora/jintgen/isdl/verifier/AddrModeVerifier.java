@@ -34,7 +34,9 @@
 
 package avrora.jintgen.isdl.verifier;
 
-import avrora.jintgen.isdl.*;
+import avrora.jintgen.isdl.AddrModeDecl;
+import avrora.jintgen.isdl.ArchDecl;
+import avrora.jintgen.isdl.OperandTypeDecl;
 import avrora.jintgen.jigir.JIGIRTypeEnv;
 import avrora.jintgen.types.Type;
 import avrora.jintgen.types.TypeCon;
@@ -51,6 +53,7 @@ public class AddrModeVerifier extends VerifierPass
     }
 
 
+    @Override
     public void verify()
     {
         uniqueCheck("AddrMode", "Addressing mode", arch.addrModes);

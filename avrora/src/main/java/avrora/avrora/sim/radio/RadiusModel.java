@@ -6,11 +6,12 @@
  */
 package avrora.avrora.sim.radio;
 
-import avrora.avrora.sim.radio.Medium.TXRX;
-import avrora.avrora.sim.radio.Topology;
-import avrora.avrora.sim.radio.Topology.Position;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
+import avrora.avrora.sim.radio.Medium.TXRX;
+import avrora.avrora.sim.radio.Topology.Position;
 
 /**
  * The <code>RadiusModel</code> definition.
@@ -37,6 +38,7 @@ public class RadiusModel implements Medium.Arbitrator
     }
 
 
+    @Override
     public int getNoise(int index)
     {
         return (-90);
@@ -44,6 +46,7 @@ public class RadiusModel implements Medium.Arbitrator
     }
 
 
+    @Override
     public double computeReceivedPower(Medium.Transmission t,
             Medium.Receiver receiver, int Milliseconds)
     {
@@ -52,6 +55,7 @@ public class RadiusModel implements Medium.Arbitrator
     }
 
 
+    @Override
     public boolean lockTransmission(Medium.Receiver receiver,
             Medium.Transmission trans, int Milliseconds)
     {
@@ -59,6 +63,7 @@ public class RadiusModel implements Medium.Arbitrator
     }
 
 
+    @Override
     public char mergeTransmissions(Medium.Receiver receiver,
             List<Medium.Transmission> it, long bit, int Milliseconds)
     {
@@ -98,8 +103,8 @@ public class RadiusModel implements Medium.Arbitrator
     protected double distanceSq(Medium.Transmitter t, Medium.Receiver r)
     {
         double distSq = 0;
-        Topology.Position a = (Topology.Position) positions.get(t);
-        Topology.Position b = (Topology.Position) positions.get(r);
+        Topology.Position a = positions.get(t);
+        Topology.Position b = positions.get(r);
         if (a != null && b != null)
         {
             double dx = a.x - b.x;

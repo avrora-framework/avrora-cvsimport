@@ -32,7 +32,9 @@
 
 package avrora.avrora.syntax;
 
-import avrora.avrora.arch.legacy.*;
+import avrora.avrora.arch.legacy.LegacyInstrProto;
+import avrora.avrora.arch.legacy.LegacyOperand;
+import avrora.avrora.arch.legacy.LegacyRegister;
 import avrora.cck.parser.AbstractToken;
 import avrora.cck.util.Util;
 
@@ -65,24 +67,28 @@ public abstract class SyntacticOperand extends ASTNode implements LegacyOperand
     }
 
 
+    @Override
     public AbstractToken getLeftMostToken()
     {
         return left;
     }
 
 
+    @Override
     public AbstractToken getRightMostToken()
     {
         return right;
     }
 
 
+    @Override
     public LegacyOperand.Register asRegister()
     {
         return null;
     }
 
 
+    @Override
     public LegacyOperand.Constant asConstant()
     {
         return null;
@@ -110,12 +116,14 @@ public abstract class SyntacticOperand extends ASTNode implements LegacyOperand
         }
 
 
+        @Override
         public LegacyOperand.Register asRegister()
         {
             return this;
         }
 
 
+        @Override
         public LegacyRegister getRegister()
         {
             // sanity check to avoid possibly hard to find bugs in the future
@@ -126,6 +134,7 @@ public abstract class SyntacticOperand extends ASTNode implements LegacyOperand
         }
 
 
+        @Override
         public void simplify(int currentByteAddress, Context c)
         {
             register = c.getRegister(name);
@@ -133,6 +142,7 @@ public abstract class SyntacticOperand extends ASTNode implements LegacyOperand
         }
 
 
+        @Override
         public String toString()
         {
             return "reg:" + name.image;
@@ -164,12 +174,14 @@ public abstract class SyntacticOperand extends ASTNode implements LegacyOperand
         }
 
 
+        @Override
         public LegacyOperand.Constant asConstant()
         {
             return this;
         }
 
 
+        @Override
         public int getValue()
         {
             // sanity check to avoid possibly hard to find bugs in the future
@@ -180,6 +192,7 @@ public abstract class SyntacticOperand extends ASTNode implements LegacyOperand
         }
 
 
+        @Override
         public int getValueAsWord()
         {
             if (!simplified)
@@ -193,6 +206,7 @@ public abstract class SyntacticOperand extends ASTNode implements LegacyOperand
         }
 
 
+        @Override
         public void simplify(int nextByteAddress, Context c)
         {
             value = expr.evaluate(nextByteAddress, c);
@@ -200,6 +214,7 @@ public abstract class SyntacticOperand extends ASTNode implements LegacyOperand
         }
 
 
+        @Override
         public String toString()
         {
             return "expr:" + expr;

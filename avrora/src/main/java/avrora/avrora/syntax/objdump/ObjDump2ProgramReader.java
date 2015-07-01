@@ -32,12 +32,15 @@
 
 package avrora.avrora.syntax.objdump;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 import avrora.avrora.arch.legacy.LegacyArchitecture;
 import avrora.avrora.core.Program;
 import avrora.avrora.core.ProgramReader;
 import avrora.avrora.syntax.RawModule;
 import avrora.cck.util.Util;
-import java.io.*;
 
 /**
  * The <code>ObjdumpProgramReader</code> is an implementation of the
@@ -64,6 +67,7 @@ public class ObjDump2ProgramReader extends ProgramReader
      * @throws IOException
      *             if there is a problem reading from the files
      */
+    @Override
     public Program read(String[] args) throws Exception
     {
         if (args.length == 0)

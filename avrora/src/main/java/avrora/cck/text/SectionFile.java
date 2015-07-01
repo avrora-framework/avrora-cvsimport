@@ -32,7 +32,12 @@
 
 package avrora.cck.text;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * The <code>SectionFile</code> class represents a file that can be used to for
@@ -71,6 +76,7 @@ public class SectionFile extends FileOutputStream
     }
 
 
+    @Override
     public void write(byte[] b) throws IOException
     {
         readHeader();
@@ -78,6 +84,7 @@ public class SectionFile extends FileOutputStream
     }
 
 
+    @Override
     public void write(byte[] b, int off, int len) throws IOException
     {
         readHeader();
@@ -86,6 +93,7 @@ public class SectionFile extends FileOutputStream
     }
 
 
+    @Override
     public void write(int b) throws IOException
     {
         readHeader();
@@ -101,6 +109,7 @@ public class SectionFile extends FileOutputStream
     }
 
 
+    @Override
     public void close() throws IOException
     {
         readHeader();

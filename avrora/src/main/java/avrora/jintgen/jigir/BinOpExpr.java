@@ -36,7 +36,10 @@ package avrora.jintgen.jigir;
 
 import avrora.cck.parser.SourcePoint;
 import avrora.jintgen.isdl.parser.Token;
-import avrora.jintgen.types.*;
+import avrora.jintgen.types.Type;
+import avrora.jintgen.types.TypeCon;
+import avrora.jintgen.types.TypeEnv;
+import avrora.jintgen.types.Typeable;
 
 /**
  * The <code>BinOp</code> inner class represents an operation on two integers
@@ -98,6 +101,7 @@ public class BinOpExpr extends Expr
      * @return true if this expression can be evaluated to a constant; false
      *         otherwise
      */
+    @Override
     public boolean isConstantExpr()
     {
         return left.isConstantExpr() && right.isConstantExpr();
@@ -112,6 +116,7 @@ public class BinOpExpr extends Expr
      *
      * @return a string representation of this expression
      */
+    @Override
     public String toString()
     {
         return innerString(left) + ' ' + operation + ' ' + innerString(right);
@@ -155,6 +160,7 @@ public class BinOpExpr extends Expr
      * @return an integer representing the precedence of this expression; higher
      *         numbers are higher precedence
      */
+    @Override
     public int getPrecedence()
     {
         if (binop == null)
@@ -171,6 +177,7 @@ public class BinOpExpr extends Expr
      * @return a <code>SourcePoint</code> instance that represents this
      *         expression in the source program
      */
+    @Override
     public SourcePoint getSourcePoint()
     {
         return operation.getSourcePoint();
@@ -191,6 +198,7 @@ public class BinOpExpr extends Expr
      * @param v
      *            the visitor to accept
      */
+    @Override
     public void accept(CodeVisitor v)
     {
         v.visit(this);
@@ -208,6 +216,7 @@ public class BinOpExpr extends Expr
      * @return the result of calling the appropriate <code>visit()</code> method
      *         of the rebuilder
      */
+    @Override
     public <Res, Env> Res accept(CodeAccumulator<Res, Env> r, Env env)
     {
         return r.visit(this, env);
@@ -231,6 +240,7 @@ public class BinOpExpr extends Expr
         }
 
 
+        @Override
         public String getOperation()
         {
             return operation;
@@ -240,6 +250,7 @@ public class BinOpExpr extends Expr
         public abstract Literal evaluate(Literal left, Literal right);
 
 
+        @Override
         public abstract Type typeCheck(TypeEnv env, Typeable left,
                 Typeable right);
     }

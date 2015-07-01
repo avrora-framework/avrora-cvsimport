@@ -32,6 +32,9 @@
 
 package avrora.avrora.monitors;
 
+import java.util.HashSet;
+import java.util.List;
+
 import avrora.avrora.arch.avr.AVRProperties;
 import avrora.avrora.arch.legacy.LegacyState;
 import avrora.avrora.core.Program;
@@ -39,12 +42,11 @@ import avrora.avrora.core.SourceMapping;
 import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.mcu.Microcontroller;
 import avrora.avrora.sim.util.MemoryProfiler;
-import avrora.cck.text.*;
+import avrora.cck.text.StringUtil;
+import avrora.cck.text.TermUtil;
+import avrora.cck.text.Terminal;
 import avrora.cck.util.Option;
 import avrora.cck.util.Util;
-
-import java.util.HashSet;
-import java.util.List;
 
 /**
  * The <code>MemoryMonitor</code> class implements a monitor that collects
@@ -143,7 +145,10 @@ public class MemoryMonitor extends MonitorFactory
                         // treat it as a label, try to convert it to address
                         SourceMapping.Location loc = sm.getLocation(val);
                         if (loc == null)
+                        {
                             Util.userError("Label unknown", val);
+                            throw new IllegalStateException("label unknown");
+                        }
                         int addr = loc.vma_addr & 0xffff;
                         for (int i = 0; i < loc.size; i++)
                             locset.add(new Integer(addr + i));
@@ -165,6 +170,7 @@ public class MemoryMonitor extends MonitorFactory
         }
 
 
+        @Override
         public void report()
         {
             TermUtil.printSeparator(
@@ -247,6 +253,7 @@ public class MemoryMonitor extends MonitorFactory
     }
 
 
+    @Override
     public avrora.avrora.monitors.Monitor newMonitor(Simulator s)
     {
         return new Monitor(s);

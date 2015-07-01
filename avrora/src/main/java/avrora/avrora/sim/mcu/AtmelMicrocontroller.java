@@ -32,15 +32,19 @@
 
 package avrora.avrora.sim.mcu;
 
+import java.util.HashMap;
+
 import avrora.avrora.arch.avr.AVRProperties;
-import avrora.avrora.sim.*;
+import avrora.avrora.sim.ActiveRegister;
+import avrora.avrora.sim.AtmelInterpreter;
+import avrora.avrora.sim.FiniteStateMachine;
+import avrora.avrora.sim.InterruptTable;
 import avrora.avrora.sim.InterruptTable.Notification;
 import avrora.avrora.sim.clock.ClockDomain;
 import avrora.avrora.sim.clock.MainClock;
 import avrora.avrora.sim.mcu.ATMegaFamily.FlagRegister;
 import avrora.avrora.sim.state.RegisterUtil.BitRangeView;
 import avrora.cck.text.Printer;
-import java.util.HashMap;
 
 /**
  * The <code>AtmelMicrocontroller</code> class represents the common
@@ -71,6 +75,7 @@ public abstract class AtmelMicrocontroller extends DefaultMCU
      *
      * @see Microcontroller#sleep()
      */
+    @Override
     public void sleep()
     {
         // transition to the sleep state in the MCUCR register
@@ -91,6 +96,7 @@ public abstract class AtmelMicrocontroller extends DefaultMCU
      * @return cycles it takes to wake up
      * @see Microcontroller#wakeup()
      */
+    @Override
     public int wakeup()
     {
         // transition to the active state (may insert transition event into
@@ -230,6 +236,7 @@ public abstract class AtmelMicrocontroller extends DefaultMCU
      * @return a reference to the <code>Pin</code> object corresponding to the
      *         named pin if it exists; null otherwise
      */
+    @Override
     public Microcontroller.Pin getPin(String n)
     {
         return pins[properties.getPin(n)];
@@ -242,6 +249,7 @@ public abstract class AtmelMicrocontroller extends DefaultMCU
      * 
      * @return a reference to the microcontroller properties for this instance
      */
+    @Override
     public MCUProperties getProperties()
     {
         return properties;
@@ -383,6 +391,7 @@ public abstract class AtmelMicrocontroller extends DefaultMCU
         }
 
 
+        @Override
         public void connectInput(Input i)
         {
             if (input != null)
@@ -407,6 +416,7 @@ public abstract class AtmelMicrocontroller extends DefaultMCU
         }
 
 
+        @Override
         protected void write(boolean value)
         {
             super.write(value);
@@ -419,6 +429,7 @@ public abstract class AtmelMicrocontroller extends DefaultMCU
         }
 
 
+        @Override
         public void onInputChanged(Input input, boolean newValue)
         {
             updateSensedLevel(newValue);

@@ -34,13 +34,38 @@
 
 package avrora.jintgen.gen;
 
-import avrora.cck.util.Util;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 import avrora.cck.util.Arithmetic;
-import avrora.jintgen.isdl.*;
+import avrora.cck.util.Util;
+import avrora.jintgen.isdl.AddrModeDecl;
+import avrora.jintgen.isdl.ArchDecl;
+import avrora.jintgen.isdl.OperandTypeDecl;
+import avrora.jintgen.isdl.SubroutineDecl;
 import avrora.jintgen.isdl.parser.Token;
-import avrora.jintgen.jigir.*;
-import avrora.jintgen.types.*;
-import java.util.*;
+import avrora.jintgen.jigir.Arith;
+import avrora.jintgen.jigir.AssignStmt;
+import avrora.jintgen.jigir.BinOpExpr;
+import avrora.jintgen.jigir.CallExpr;
+import avrora.jintgen.jigir.CallStmt;
+import avrora.jintgen.jigir.ConversionExpr;
+import avrora.jintgen.jigir.DotExpr;
+import avrora.jintgen.jigir.Expr;
+import avrora.jintgen.jigir.FixedRangeExpr;
+import avrora.jintgen.jigir.IndexExpr;
+import avrora.jintgen.jigir.JIGIRTypeEnv;
+import avrora.jintgen.jigir.Literal;
+import avrora.jintgen.jigir.ReadExpr;
+import avrora.jintgen.jigir.Stmt;
+import avrora.jintgen.jigir.StmtRebuilder;
+import avrora.jintgen.jigir.UnOpExpr;
+import avrora.jintgen.jigir.VarExpr;
+import avrora.jintgen.jigir.WriteStmt;
+import avrora.jintgen.types.Type;
+import avrora.jintgen.types.TypeCon;
+import avrora.jintgen.types.TypeRef;
 
 /**
  * The <code>CodeSimplifier</code> class simplifies ISDL code by translating
@@ -138,6 +163,7 @@ public class CodeSimplifier extends StmtRebuilder<CGEnv>
     }
 
 
+    @Override
     public Expr visit(BinOpExpr e, CGEnv env)
     {
         e.getBinOp();
@@ -149,6 +175,7 @@ public class CodeSimplifier extends StmtRebuilder<CGEnv>
     }
 
 
+    @Override
     public Expr visit(UnOpExpr e, CGEnv env)
     {
         UnOpExpr.UnOpImpl unop = e.getUnOp();
@@ -166,6 +193,7 @@ public class CodeSimplifier extends StmtRebuilder<CGEnv>
     }
 
 
+    @Override
     public Expr visit(IndexExpr e, CGEnv env)
     {
         if (isMap(e.expr))
@@ -187,6 +215,7 @@ public class CodeSimplifier extends StmtRebuilder<CGEnv>
     }
 
 
+    @Override
     public Expr visit(FixedRangeExpr e, CGEnv env)
     {
         JIGIRTypeEnv.TYPE_int t = (JIGIRTypeEnv.TYPE_int) env.expect;
@@ -208,12 +237,14 @@ public class CodeSimplifier extends StmtRebuilder<CGEnv>
     }
 
 
+    @Override
     public List<Expr> visitExprList(List<Expr> l, CGEnv env)
     {
         throw Util.failure("should not rebuild expr list directly");
     }
 
 
+    @Override
     public Expr visit(CallExpr e, CGEnv env)
     {
         List<Expr> na = rebuildParams(e.getDecl().params, e.args);
@@ -235,6 +266,7 @@ public class CodeSimplifier extends StmtRebuilder<CGEnv>
     }
 
 
+    @Override
     public Expr visit(ReadExpr e, CGEnv env)
     {
         OperandTypeDecl.Accessor accessor = e.getAccessor();
@@ -253,6 +285,7 @@ public class CodeSimplifier extends StmtRebuilder<CGEnv>
     }
 
 
+    @Override
     public Expr visit(ConversionExpr e, CGEnv env)
     {
         Type rt = env.expect;
@@ -299,6 +332,7 @@ public class CodeSimplifier extends StmtRebuilder<CGEnv>
     }
 
 
+    @Override
     public Expr visit(Literal.BoolExpr e, CGEnv env)
     {
         if (env.expect == arch.typeEnv.BOOLEAN)
@@ -319,6 +353,7 @@ public class CodeSimplifier extends StmtRebuilder<CGEnv>
     }
 
 
+    @Override
     public Expr visit(Literal.IntExpr e, CGEnv env)
     {
         if (env.expect.isBasedOn("int"))
@@ -332,12 +367,14 @@ public class CodeSimplifier extends StmtRebuilder<CGEnv>
     }
 
 
+    @Override
     public Expr visit(VarExpr e, CGEnv env)
     {
         return convert(e, env.expect, env.shift);
     }
 
 
+    @Override
     public Expr visit(DotExpr e, CGEnv env)
     {
         Expr ne = promote(e.expr);
@@ -509,6 +546,7 @@ public class CodeSimplifier extends StmtRebuilder<CGEnv>
     }
 
 
+    @Override
     public Stmt visit(WriteStmt s, CGEnv env)
     {
         OperandTypeDecl.Accessor accessor = s.getAccessor();
@@ -532,6 +570,7 @@ public class CodeSimplifier extends StmtRebuilder<CGEnv>
     }
 
 
+    @Override
     public Stmt visit(CallStmt s, CGEnv env)
     {
         List<Expr> na = rebuildParams(s.getDecl().params, s.args);
@@ -541,12 +580,14 @@ public class CodeSimplifier extends StmtRebuilder<CGEnv>
     }
 
 
+    @Override
     public Stmt visit(AssignStmt s, CGEnv env)
     {
         throw Util.failure("Assignment statement not canonicalized");
     }
 
 
+    @Override
     public Stmt visit(AssignStmt.Var s, CGEnv env)
     {
         Expr ne = promote(s.expr, s.dest.getType(), 0);
@@ -554,6 +595,7 @@ public class CodeSimplifier extends StmtRebuilder<CGEnv>
     }
 
 
+    @Override
     public Stmt visit(AssignStmt.Map s, CGEnv env)
     {
         List<Expr> a = new LinkedList<Expr>();
@@ -570,6 +612,7 @@ public class CodeSimplifier extends StmtRebuilder<CGEnv>
     }
 
 
+    @Override
     public Stmt visit(AssignStmt.Bit s, CGEnv env)
     {
         Expr nb = promote(s.bit);
@@ -589,6 +632,7 @@ public class CodeSimplifier extends StmtRebuilder<CGEnv>
     }
 
 
+    @Override
     public Stmt visit(AssignStmt.FixedRange s, CGEnv env)
     {
         Expr ne = promote(s.expr, INT, s.low_bit);
@@ -620,6 +664,7 @@ public class CodeSimplifier extends StmtRebuilder<CGEnv>
     }
 
 
+    @Override
     protected Expr visitExpr(Expr e, CGEnv env)
     {
         Expr ne;

@@ -37,7 +37,9 @@ import avrora.avrora.sim.FiniteStateMachine;
 import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.clock.Clock;
 import avrora.avrora.sim.mcu.DefaultMCU;
-import avrora.cck.text.*;
+import avrora.cck.text.StringUtil;
+import avrora.cck.text.TermUtil;
+import avrora.cck.text.Terminal;
 
 /**
  * The <code>SleepMonitor</code> class is a monitor that tracks statistics about
@@ -71,6 +73,7 @@ public class SleepMonitor extends MonitorFactory
         }
 
 
+        @Override
         public void report()
         {
             recordCycles(fsm.getCurrentState());
@@ -97,12 +100,14 @@ public class SleepMonitor extends MonitorFactory
         }
 
 
+        @Override
         public void fireBeforeTransition(int bs, int as)
         {
             // do nothing.
         }
 
 
+        @Override
         public void fireAfterTransition(int bs, int as)
         {
             recordCycles(bs);
@@ -127,6 +132,7 @@ public class SleepMonitor extends MonitorFactory
     }
 
 
+    @Override
     public Monitor newMonitor(Simulator s)
     {
         return new Mon(s);

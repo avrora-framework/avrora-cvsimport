@@ -32,10 +32,12 @@
 
 package avrora.avrora.gui;
 
+import java.util.HashMap;
+import java.util.List;
+
 import avrora.avrora.sim.Simulation;
 import avrora.avrora.sim.Simulation.Node;
 import avrora.avrora.sim.Simulator;
-import java.util.*;
 
 /**
  * There are two types of visual monitors for the GUI. First, there are single
@@ -83,11 +85,12 @@ public abstract class SingleNodeMonitor implements Simulation.GuiMonitor
      * @param nodes
      *            A list of the nodes that should be attached to the monitor
      */
+    @Override
     public void attach(Simulation sim, List<Simulation.Node> nodes)
     {
         for (Simulation.Node node : nodes)
         {
-            if (panelMap.containsKey(nodes))
+            if (panelMap.containsKey(node))
                 continue;
             MonitorPanel p = AvroraGui.instance
                     .createMonitorPanel(monitorName + " - " + node.id);
@@ -107,6 +110,7 @@ public abstract class SingleNodeMonitor implements Simulation.GuiMonitor
      * @param s
      *            The simulator that the monitor can be inserted into
      */
+    @Override
     public void construct(Simulation sim, Simulation.Node n, Simulator s)
     {
         panelMap.get(n).construct(s);
@@ -122,6 +126,7 @@ public abstract class SingleNodeMonitor implements Simulation.GuiMonitor
      * @param s
      *            The simulator that the monitor can be inserted into
      */
+    @Override
     public void destruct(Simulation sim, Simulation.Node n, Simulator s)
     {
         panelMap.get(n).destruct();
@@ -136,6 +141,7 @@ public abstract class SingleNodeMonitor implements Simulation.GuiMonitor
      *            element of the list is not already attached to the node, it
      *            will just skip that element.
      */
+    @Override
     public void remove(Simulation sim, List<Simulation.Node> nodes)
     {
         for (Simulation.Node n : nodes)

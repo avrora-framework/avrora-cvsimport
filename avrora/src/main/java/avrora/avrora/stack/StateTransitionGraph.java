@@ -32,11 +32,12 @@
 
 package avrora.avrora.stack;
 
+import java.util.Iterator;
+
 import avrora.avrora.core.Program;
 import avrora.cck.text.Printer;
 import avrora.cck.text.StringUtil;
 import avrora.cck.util.Util;
-import java.util.Iterator;
 
 /**
  * @author Ben L. Titzer
@@ -358,7 +359,7 @@ public class StateTransitionGraph
         Iterator<StateCache.State> i = cache.getStateIterator();
         while (i.hasNext())
         {
-            StateCache.State state = (StateCache.State) i.next();
+            StateCache.State state = i.next();
             state.info.stateSet = null;
         }
     }
@@ -377,7 +378,7 @@ public class StateTransitionGraph
         i = cache.getStateIterator();
         while (i.hasNext())
         {
-            StateCache.State state = (StateCache.State) i.next();
+            StateCache.State state = i.next();
             for (Edge e = state.info.forwardEdges; e != null; e = e.forwardLink)
             {
                 StringBuffer buf = dumpToBuffer(e);

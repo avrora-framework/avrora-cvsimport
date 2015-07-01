@@ -32,9 +32,16 @@
 
 package avrora.avrora.sim.mcu;
 
-import avrora.avrora.arch.legacy.*;
+import avrora.avrora.arch.legacy.LegacyDisassembler;
+import avrora.avrora.arch.legacy.LegacyInstr;
+import avrora.avrora.arch.legacy.LegacyInstrVisitor;
+import avrora.avrora.arch.legacy.LegacyOperand;
+import avrora.avrora.arch.legacy.LegacyRegister;
 import avrora.avrora.core.Program;
-import avrora.avrora.sim.*;
+import avrora.avrora.sim.AtmelInterpreter;
+import avrora.avrora.sim.CodeSegment;
+import avrora.avrora.sim.RWRegister;
+import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.clock.MainClock;
 import avrora.avrora.sim.output.SimPrinter;
 import avrora.cck.text.StringUtil;
@@ -93,6 +100,7 @@ public class ReprogrammableCodeSegment extends CodeSegment
         }
 
 
+        @Override
         public CodeSegment newCodeSegment(String name, AtmelInterpreter bi,
                 Program p)
         {
@@ -121,6 +129,7 @@ public class ReprogrammableCodeSegment extends CodeSegment
         ResetEvent reset = new ResetEvent();
 
 
+        @Override
         public void write(byte val)
         {
 
@@ -147,6 +156,7 @@ public class ReprogrammableCodeSegment extends CodeSegment
 
         class ResetEvent implements Simulator.Event
         {
+            @Override
             public void fire()
             {
                 if (flashPrinter != null)
@@ -279,6 +289,7 @@ public class ReprogrammableCodeSegment extends CodeSegment
      * program executes an instruction that updates the program memory. For
      * example, the SPM instruction.
      */
+    @Override
     public void update()
     {
         // TODO: check that PC is in the bootloader section
@@ -383,6 +394,7 @@ public class ReprogrammableCodeSegment extends CodeSegment
         }
 
 
+        @Override
         public void fire()
         {
             // erase the page
@@ -422,6 +434,7 @@ public class ReprogrammableCodeSegment extends CodeSegment
         }
 
 
+        @Override
         public void fire()
         {
             // write the page
@@ -483,6 +496,7 @@ public class ReprogrammableCodeSegment extends CodeSegment
         }
 
 
+        @Override
         public void accept(LegacyInstrVisitor v)
         {
             LegacyInstr i = disassembler.disassembleLegacy(segment_data, 0,
@@ -495,6 +509,7 @@ public class ReprogrammableCodeSegment extends CodeSegment
         }
 
 
+        @Override
         public LegacyInstr build(int address, LegacyOperand[] ops)
         {
             throw Util.failure(
@@ -502,12 +517,14 @@ public class ReprogrammableCodeSegment extends CodeSegment
         }
 
 
+        @Override
         public String getOperands()
         {
             throw Util.failure("DisassembleLegacyInstr has no operands");
         }
 
 
+        @Override
         public LegacyInstr asInstr()
         {
             LegacyInstr i = disassembler.disassembleLegacy(segment_data, 0,

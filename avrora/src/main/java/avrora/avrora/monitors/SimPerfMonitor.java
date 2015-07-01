@@ -34,7 +34,9 @@ package avrora.avrora.monitors;
 
 import avrora.avrora.sim.Simulator;
 import avrora.cck.stat.TimeSequence;
-import avrora.cck.text.*;
+import avrora.cck.text.StringUtil;
+import avrora.cck.text.TermUtil;
+import avrora.cck.text.Terminal;
 import avrora.cck.util.Option;
 
 /**
@@ -71,6 +73,7 @@ public class SimPerfMonitor extends MonitorFactory
         }
 
 
+        @Override
         public void report()
         {
 
@@ -120,6 +123,7 @@ public class SimPerfMonitor extends MonitorFactory
 
         class Event implements Simulator.Event
         {
+            @Override
             public void fire()
             {
                 long time = simulator.getState().getCycles();
@@ -154,6 +158,7 @@ public class SimPerfMonitor extends MonitorFactory
      * @return an instance of the <code>Monitor</code> interface that tracks
      *         performance information from the program
      */
+    @Override
     public Monitor newMonitor(Simulator s)
     {
         return new Mon(s);

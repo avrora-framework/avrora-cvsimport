@@ -58,7 +58,7 @@ public class VersionTag
      */
     public static VersionTag getVersionTag(String module)
     {
-        return (VersionTag) tags.get(module);
+        return tags.get(module);
     }
 
     /**
@@ -139,6 +139,7 @@ public class VersionTag
      *
      * @return a string representation of this version
      */
+    @Override
     public String toString()
     {
         return string;

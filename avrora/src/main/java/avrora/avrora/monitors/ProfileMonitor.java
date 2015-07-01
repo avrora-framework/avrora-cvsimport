@@ -32,14 +32,20 @@
 
 package avrora.avrora.monitors;
 
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+
 import avrora.avrora.arch.AbstractInstr;
 import avrora.avrora.core.Program;
 import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.State;
 import avrora.cck.stat.StatUtil;
-import avrora.cck.text.*;
+import avrora.cck.text.StringUtil;
+import avrora.cck.text.TermUtil;
+import avrora.cck.text.Terminal;
 import avrora.cck.util.Option;
-import java.util.*;
 
 /**
  * The <code>ProfileMonitor</code> class represents a monitor that can collect
@@ -118,6 +124,7 @@ public class ProfileMonitor extends MonitorFactory
             }
 
 
+            @Override
             public void fire()
             {
                 icount[simulator.getState().getPC()]++;
@@ -135,6 +142,7 @@ public class ProfileMonitor extends MonitorFactory
             protected long timeBegan;
 
 
+            @Override
             public void fireBefore(State state, int pc)
             {
                 icount[pc]++;
@@ -142,6 +150,7 @@ public class ProfileMonitor extends MonitorFactory
             }
 
 
+            @Override
             public void fireAfter(State state, int pc)
             {
                 itime[pc] += state.getCycles() - timeBegan;
@@ -156,6 +165,7 @@ public class ProfileMonitor extends MonitorFactory
         public class CProbe extends Simulator.Probe.Empty
         {
 
+            @Override
             public void fireBefore(State state, int pc)
             {
                 icount[pc]++;
@@ -163,6 +173,7 @@ public class ProfileMonitor extends MonitorFactory
         }
 
 
+        @Override
         public void report()
         {
 
@@ -265,6 +276,7 @@ public class ProfileMonitor extends MonitorFactory
             long cycles;
 
 
+            @Override
             public int compareTo(InstrProfileEntry other)
             {
                 if (this.cycles > 0)
@@ -323,7 +335,7 @@ public class ProfileMonitor extends MonitorFactory
                 if (i == null)
                     continue;
                 String variant = i.getName();
-                InstrProfileEntry entry = (InstrProfileEntry) cmap.get(variant);
+                InstrProfileEntry entry = cmap.get(variant);
                 if (entry == null)
                 {
                     entry = new InstrProfileEntry();
@@ -352,6 +364,7 @@ public class ProfileMonitor extends MonitorFactory
     }
 
 
+    @Override
     public Monitor newMonitor(Simulator s)
     {
         return new Mon(s);

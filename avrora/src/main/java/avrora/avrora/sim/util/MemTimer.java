@@ -32,7 +32,8 @@
 
 package avrora.avrora.sim.util;
 
-import avrora.avrora.sim.*;
+import avrora.avrora.sim.Simulator;
+import avrora.avrora.sim.State;
 import avrora.cck.text.Terminal;
 
 /**
@@ -54,6 +55,7 @@ public class MemTimer extends Simulator.Watch.Empty
     }
 
 
+    @Override
     public void fireBeforeWrite(State state, int data_addr, byte value)
     {
         if (data_addr != base)

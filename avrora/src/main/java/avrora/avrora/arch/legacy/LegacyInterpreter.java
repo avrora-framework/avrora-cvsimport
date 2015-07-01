@@ -34,7 +34,10 @@ package avrora.avrora.arch.legacy;
 
 import avrora.avrora.arch.avr.AVRProperties;
 import avrora.avrora.core.Program;
-import avrora.avrora.sim.*;
+import avrora.avrora.sim.AtmelInterpreter;
+import avrora.avrora.sim.Interpreter;
+import avrora.avrora.sim.InterpreterFactory;
+import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.mcu.MCUProperties;
 import avrora.cck.util.Arithmetic;
 
@@ -55,6 +58,7 @@ public class LegacyInterpreter extends AtmelInterpreter
 
     public static class Factory extends InterpreterFactory
     {
+        @Override
         public Interpreter newInterpreter(Simulator s, Program p,
                 MCUProperties pr)
         {
@@ -92,6 +96,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     protected void runLoop()
     {
 
@@ -139,6 +144,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public int step()
     {
         nextPC = pc;
@@ -320,6 +326,7 @@ public class LegacyInterpreter extends AtmelInterpreter
 
 
     // --BEGIN INTERPRETER GENERATOR--
+    @Override
     public void visit(LegacyInstr.ADC i)
     {
         nextPC = pc + 2;
@@ -344,6 +351,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.ADD i)
     {
         nextPC = pc + 2;
@@ -368,6 +376,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.ADIW i)
     {
         nextPC = pc + 2;
@@ -385,6 +394,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.AND i)
     {
         nextPC = pc + 2;
@@ -401,6 +411,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.ANDI i)
     {
         nextPC = pc + 2;
@@ -417,6 +428,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.ASR i)
     {
         nextPC = pc + 2;
@@ -435,6 +447,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BCLR i)
     {
         nextPC = pc + 2;
@@ -443,6 +456,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BLD i)
     {
         nextPC = pc + 2;
@@ -452,6 +466,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRBC i)
     {
         int npc = pc + 2;
@@ -467,6 +482,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRBS i)
     {
         int npc = pc + 2;
@@ -482,6 +498,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRCC i)
     {
         int npc = pc + 2;
@@ -497,6 +514,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRCS i)
     {
         int npc = pc + 2;
@@ -512,6 +530,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BREAK i)
     {
         nextPC = pc + 2;
@@ -520,6 +539,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BREQ i)
     {
         int npc = pc + 2;
@@ -535,6 +555,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRGE i)
     {
         int npc = pc + 2;
@@ -550,6 +571,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRHC i)
     {
         int npc = pc + 2;
@@ -565,6 +587,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRHS i)
     {
         int npc = pc + 2;
@@ -580,6 +603,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRID i)
     {
         int npc = pc + 2;
@@ -595,6 +619,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRIE i)
     {
         int npc = pc + 2;
@@ -610,6 +635,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRLO i)
     {
         int npc = pc + 2;
@@ -625,6 +651,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRLT i)
     {
         int npc = pc + 2;
@@ -640,6 +667,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRMI i)
     {
         int npc = pc + 2;
@@ -655,6 +683,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRNE i)
     {
         int npc = pc + 2;
@@ -670,6 +699,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRPL i)
     {
         int npc = pc + 2;
@@ -685,6 +715,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRSH i)
     {
         int npc = pc + 2;
@@ -700,6 +731,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRTC i)
     {
         int npc = pc + 2;
@@ -715,6 +747,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRTS i)
     {
         int npc = pc + 2;
@@ -730,6 +763,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRVC i)
     {
         int npc = pc + 2;
@@ -745,6 +779,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRVS i)
     {
         int npc = pc + 2;
@@ -760,6 +795,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BSET i)
     {
         nextPC = pc + 2;
@@ -768,6 +804,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.BST i)
     {
         nextPC = pc + 2;
@@ -776,6 +813,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.CALL i)
     {
         int tmp_0 = (pc + 4) / 2;
@@ -786,6 +824,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.CBI i)
     {
         nextPC = pc + 2;
@@ -794,6 +833,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.CBR i)
     {
         nextPC = pc + 2;
@@ -810,6 +850,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.CLC i)
     {
         nextPC = pc + 2;
@@ -818,6 +859,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.CLH i)
     {
         nextPC = pc + 2;
@@ -826,6 +868,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.CLI i)
     {
         nextPC = pc + 2;
@@ -834,6 +877,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.CLN i)
     {
         nextPC = pc + 2;
@@ -842,6 +886,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.CLR i)
     {
         nextPC = pc + 2;
@@ -854,6 +899,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.CLS i)
     {
         nextPC = pc + 2;
@@ -862,6 +908,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.CLT i)
     {
         nextPC = pc + 2;
@@ -870,6 +917,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.CLV i)
     {
         nextPC = pc + 2;
@@ -878,6 +926,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.CLZ i)
     {
         nextPC = pc + 2;
@@ -886,6 +935,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.COM i)
     {
         nextPC = pc + 2;
@@ -900,6 +950,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.CP i)
     {
         nextPC = pc + 2;
@@ -923,6 +974,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.CPC i)
     {
         nextPC = pc + 2;
@@ -946,6 +998,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.CPI i)
     {
         nextPC = pc + 2;
@@ -969,6 +1022,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.CPSE i)
     {
         nextPC = pc + 2;
@@ -1006,6 +1060,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.DEC i)
     {
         nextPC = pc + 2;
@@ -1020,6 +1075,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.EICALL i)
     {
         nextPC = pc + 2;
@@ -1027,6 +1083,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.EIJMP i)
     {
         nextPC = pc + 2;
@@ -1034,6 +1091,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.ELPM i)
     {
         nextPC = pc + 2;
@@ -1043,6 +1101,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.ELPMD i)
     {
         nextPC = pc + 2;
@@ -1052,6 +1111,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.ELPMPI i)
     {
         nextPC = pc + 2;
@@ -1064,6 +1124,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.EOR i)
     {
         nextPC = pc + 2;
@@ -1077,6 +1138,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.FMUL i)
     {
         nextPC = pc + 2;
@@ -1089,6 +1151,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.FMULS i)
     {
         nextPC = pc + 2;
@@ -1101,6 +1164,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.FMULSU i)
     {
         nextPC = pc + 2;
@@ -1113,6 +1177,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.ICALL i)
     {
         int tmp_0 = (pc + 2) / 2;
@@ -1123,6 +1188,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.IJMP i)
     {
         nextPC = getRegisterWord(RZ) * 2;
@@ -1130,6 +1196,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.IN i)
     {
         nextPC = pc + 2;
@@ -1138,6 +1205,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.INC i)
     {
         nextPC = pc + 2;
@@ -1152,6 +1220,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.JMP i)
     {
         nextPC = i.imm1 * 2;
@@ -1159,6 +1228,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.LD i)
     {
         nextPC = pc + 2;
@@ -1167,6 +1237,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.LDD i)
     {
         nextPC = pc + 2;
@@ -1175,6 +1246,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.LDI i)
     {
         nextPC = pc + 2;
@@ -1183,6 +1255,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.LDPD i)
     {
         nextPC = pc + 2;
@@ -1193,6 +1266,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.LDPI i)
     {
         nextPC = pc + 2;
@@ -1203,6 +1277,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.LDS i)
     {
         nextPC = pc + 4;
@@ -1211,6 +1286,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.LPM i)
     {
         nextPC = pc + 2;
@@ -1219,6 +1295,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.LPMD i)
     {
         nextPC = pc + 2;
@@ -1227,6 +1304,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.LPMPI i)
     {
         nextPC = pc + 2;
@@ -1237,6 +1315,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.LSL i)
     {
         nextPC = pc + 2;
@@ -1256,6 +1335,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.LSR i)
     {
         nextPC = pc + 2;
@@ -1274,6 +1354,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.MOV i)
     {
         nextPC = pc + 2;
@@ -1282,6 +1363,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.MOVW i)
     {
         nextPC = pc + 2;
@@ -1290,6 +1372,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.MUL i)
     {
         nextPC = pc + 2;
@@ -1301,6 +1384,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.MULS i)
     {
         nextPC = pc + 2;
@@ -1312,6 +1396,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.MULSU i)
     {
         nextPC = pc + 2;
@@ -1323,6 +1408,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.NEG i)
     {
         nextPC = pc + 2;
@@ -1348,6 +1434,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.NOP i)
     {
         nextPC = pc + 2;
@@ -1355,6 +1442,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.OR i)
     {
         nextPC = pc + 2;
@@ -1371,6 +1459,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.ORI i)
     {
         nextPC = pc + 2;
@@ -1387,6 +1476,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.OUT i)
     {
         nextPC = pc + 2;
@@ -1395,6 +1485,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.POP i)
     {
         nextPC = pc + 2;
@@ -1403,6 +1494,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.PUSH i)
     {
         nextPC = pc + 2;
@@ -1411,6 +1503,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.RCALL i)
     {
         int tmp_0 = (pc + 2) / 2;
@@ -1421,6 +1514,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.RET i)
     {
         byte tmp_0 = popByte();
@@ -1430,6 +1524,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.RETI i)
     {
         byte tmp_0 = popByte();
@@ -1440,6 +1535,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.RJMP i)
     {
         nextPC = i.imm1 * 2 + pc + 2;
@@ -1447,6 +1543,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.ROL i)
     {
         nextPC = pc + 2;
@@ -1466,6 +1563,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.ROR i)
     {
         nextPC = pc + 2;
@@ -1484,6 +1582,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SBC i)
     {
         nextPC = pc + 2;
@@ -1509,6 +1608,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SBCI i)
     {
         nextPC = pc + 2;
@@ -1534,6 +1634,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SBI i)
     {
         nextPC = pc + 2;
@@ -1542,6 +1643,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SBIC i)
     {
         nextPC = pc + 2;
@@ -1563,6 +1665,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SBIS i)
     {
         nextPC = pc + 2;
@@ -1584,6 +1687,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SBIW i)
     {
         nextPC = pc + 2;
@@ -1601,6 +1705,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SBR i)
     {
         nextPC = pc + 2;
@@ -1617,6 +1722,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SBRC i)
     {
         nextPC = pc + 2;
@@ -1638,6 +1744,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SBRS i)
     {
         nextPC = pc + 2;
@@ -1659,6 +1766,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SEC i)
     {
         nextPC = pc + 2;
@@ -1667,6 +1775,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SEH i)
     {
         nextPC = pc + 2;
@@ -1675,6 +1784,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SEI i)
     {
         nextPC = pc + 2;
@@ -1683,6 +1793,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SEN i)
     {
         nextPC = pc + 2;
@@ -1691,6 +1802,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SER i)
     {
         nextPC = pc + 2;
@@ -1699,6 +1811,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SES i)
     {
         nextPC = pc + 2;
@@ -1707,6 +1820,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SET i)
     {
         nextPC = pc + 2;
@@ -1715,6 +1829,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SEV i)
     {
         nextPC = pc + 2;
@@ -1723,6 +1838,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SEZ i)
     {
         nextPC = pc + 2;
@@ -1731,6 +1847,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SLEEP i)
     {
         nextPC = pc + 2;
@@ -1739,6 +1856,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SPM i)
     {
         nextPC = pc + 2;
@@ -1747,6 +1865,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.ST i)
     {
         nextPC = pc + 2;
@@ -1755,6 +1874,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.STD i)
     {
         nextPC = pc + 2;
@@ -1763,6 +1883,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.STPD i)
     {
         nextPC = pc + 2;
@@ -1773,6 +1894,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.STPI i)
     {
         nextPC = pc + 2;
@@ -1783,6 +1905,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.STS i)
     {
         nextPC = pc + 4;
@@ -1791,6 +1914,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SUB i)
     {
         nextPC = pc + 2;
@@ -1816,6 +1940,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SUBI i)
     {
         nextPC = pc + 2;
@@ -1841,6 +1966,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.SWAP i)
     {
         nextPC = pc + 2;
@@ -1855,6 +1981,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.TST i)
     {
         nextPC = pc + 2;
@@ -1867,6 +1994,7 @@ public class LegacyInterpreter extends AtmelInterpreter
     }
 
 
+    @Override
     public void visit(LegacyInstr.WDR i)
     {
         nextPC = pc + 2;

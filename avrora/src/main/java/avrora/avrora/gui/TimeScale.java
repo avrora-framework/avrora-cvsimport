@@ -32,10 +32,14 @@
 
 package avrora.avrora.gui;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.util.LinkedList;
+
 import avrora.cck.text.StringUtil;
 import avrora.cck.util.Util;
-import java.awt.*;
-import java.util.LinkedList;
 
 /**
  * The <code>TimeScale</code> class handles the conversion of time scales in
@@ -92,14 +96,14 @@ public class TimeScale
         {
             lout.add(newZoomLevel(scale));
         }
-        ZoomLevel[] zout = (ZoomLevel[]) lout.toArray(zooms);
+        ZoomLevel[] zout = lout.toArray(zooms);
 
         LinkedList<ZoomLevel> lin = new LinkedList<ZoomLevel>();
         for (double scale = 1; scale > 0.02; scale /= scaleup)
         {
             lin.add(newZoomLevel(scale));
         }
-        ZoomLevel[] zin = (ZoomLevel[]) lin.toArray(zooms);
+        ZoomLevel[] zin = lin.toArray(zooms);
 
         zooms = new ZoomLevel[lout.size() + lin.size()];
         System.arraycopy(zout, 0, zooms, 0, zout.length);

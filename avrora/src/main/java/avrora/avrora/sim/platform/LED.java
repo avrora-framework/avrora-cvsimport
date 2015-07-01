@@ -34,10 +34,10 @@ package avrora.avrora.sim.platform;
 
 import avrora.avrora.sim.FiniteStateMachine;
 import avrora.avrora.sim.Simulator;
-import avrora.avrora.sim.output.SimPrinter;
 import avrora.avrora.sim.clock.Clock;
 import avrora.avrora.sim.energy.Energy;
 import avrora.avrora.sim.mcu.Microcontroller;
+import avrora.avrora.sim.output.SimPrinter;
 import avrora.cck.text.Terminal;
 
 /**
@@ -82,12 +82,14 @@ public class LED implements Microcontroller.Pin.Output
         }
 
 
+        @Override
         public void fireBeforeTransition(int beforeState, int afterState)
         {
             // do nothing
         }
 
 
+        @Override
         public void fireAfterTransition(int beforeState, int afterState)
         {
             if (beforeState == afterState)
@@ -115,6 +117,7 @@ public class LED implements Microcontroller.Pin.Output
     }
 
 
+    @SuppressWarnings("unused")
     protected LED(Simulator s, int n, String c)
     {
         sim = s;
@@ -129,6 +132,7 @@ public class LED implements Microcontroller.Pin.Output
     }
 
 
+    @Override
     public void write(boolean level)
     {
         // NOTE: there is an inverter between the port and the LED, we reverse

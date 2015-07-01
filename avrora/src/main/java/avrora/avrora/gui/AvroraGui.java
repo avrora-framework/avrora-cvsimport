@@ -32,6 +32,34 @@
 
 package avrora.avrora.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Vector;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.OverlayLayout;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import avrora.avrora.Version;
 import avrora.avrora.gui.VisualRadioMonitor.VisualMonitor;
 import avrora.avrora.sim.Simulation;
@@ -39,15 +67,6 @@ import avrora.avrora.sim.types.SensorSimulation;
 import avrora.cck.util.Option;
 import avrora.cck.util.Options;
 import avrora.cck.util.Util;
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.*;
-import java.util.List;
-import java.net.URL;
 
 /**
  * The <code> AvroraGUI </code> is the top level GUI component. It should be
@@ -256,6 +275,7 @@ public class AvroraGui implements ActionListener, ChangeListener
      * @param e
      *            Holds information about what event happened
      */
+    @Override
     public void actionPerformed(ActionEvent e)
     {
         if (simTimeBox.checkAndDispatch(e))
@@ -275,6 +295,7 @@ public class AvroraGui implements ActionListener, ChangeListener
      * @param e
      *            Holds information about what event happened
      */
+    @Override
     public void stateChanged(ChangeEvent e)
     {
         if (simTimeBox.sliderAndSpinnerDispatch(e))
@@ -587,6 +608,7 @@ public class AvroraGui implements ActionListener, ChangeListener
      */
     public class PaintThread extends Thread
     {
+        @Override
         public void run()
         {
             try

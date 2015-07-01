@@ -32,12 +32,12 @@
 
 package avrora.avrora.sim.mcu;
 
+import java.util.HashMap;
+
 import avrora.avrora.sim.ActiveRegister;
 import avrora.avrora.sim.RWRegister;
 import avrora.cck.text.StringUtil;
 import avrora.cck.util.Util;
-import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * The <code>RegisterSet</code> class is a utility that simplifies the
@@ -146,6 +146,7 @@ public class RegisterSet
         }
 
 
+        @Override
         void write(byte val)
         {
             int wval = (val >> ior_low_bit) & mask;
@@ -168,6 +169,7 @@ public class RegisterSet
         }
 
 
+        @Override
         void write(byte val)
         {
             int value = (val >> ior_low_bit) & mask;
@@ -184,6 +186,7 @@ public class RegisterSet
         }
 
 
+        @Override
         void write(byte val)
         {
             // TODO: check that all writes are zeroes
@@ -199,6 +202,7 @@ public class RegisterSet
         }
 
 
+        @Override
         void write(byte val)
         {
             // do nothing.
@@ -223,12 +227,14 @@ public class RegisterSet
         }
 
 
+        @Override
         public byte read()
         {
             return value;
         }
 
 
+        @Override
         public void write(byte nval)
         {
             this.value = nval;
@@ -312,13 +318,11 @@ public class RegisterSet
         {
             // if the field has only one subfield, write the whole field value
             // at once
-            srw[cntr] = new TotalFieldWriter(sf,
-                    (FieldWriter) fields.get(field.name));
+            srw[cntr] = new TotalFieldWriter(sf, fields.get(field.name));
         } else
         {
             // otherwise, this subfield is for a field that is fragmented
-            srw[cntr] = new SubFieldWriter(sf,
-                    (FieldWriter) fields.get(field.name));
+            srw[cntr] = new SubFieldWriter(sf, fields.get(field.name));
         }
     }
 
@@ -383,7 +387,7 @@ public class RegisterSet
 
     private FieldWriter getFieldWriter(String fname)
     {
-        FieldWriter fwriter = ((FieldWriter) fields.get(fname));
+        FieldWriter fwriter = fields.get(fname);
         if (fwriter == null)
         {
             throw Util.failure("Field not found in RegisterSet: "

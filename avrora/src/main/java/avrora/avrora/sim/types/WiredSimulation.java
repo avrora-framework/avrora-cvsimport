@@ -32,6 +32,8 @@
 
 package avrora.avrora.sim.types;
 
+import java.util.Random;
+
 import avrora.avrora.Main;
 import avrora.avrora.core.LoadableProgram;
 import avrora.avrora.sim.Simulation;
@@ -39,8 +41,9 @@ import avrora.avrora.sim.SimulatorThread;
 import avrora.avrora.sim.platform.PinConnect;
 import avrora.avrora.sim.platform.PlatformFactory;
 import avrora.cck.text.StringUtil;
-import avrora.cck.util.*;
-import java.util.Random;
+import avrora.cck.util.Option;
+import avrora.cck.util.Options;
+import avrora.cck.util.Util;
 
 /**
  * The <code>WiredSimulation</code> class represents a simulation type where
@@ -103,6 +106,7 @@ public class WiredSimulation extends Simulation
          * connecting the node's sensor input to replay or random data as
          * specified on the command line.
          */
+        @Override
         protected void instantiate()
         {
             createNode();
@@ -122,6 +126,7 @@ public class WiredSimulation extends Simulation
          * simulation. This method extends the default simulation remove method
          * by removing the node from the radio air implementation.
          */
+        @Override
         protected void remove()
         {
             // FIXME:perhaps disconnect wires?
@@ -167,6 +172,7 @@ public class WiredSimulation extends Simulation
      *            the program to load onto the node
      * @return a new instance of the <code>WiredNode</code> class for the node
      */
+    @Override
     public Node newNode(int id, PlatformFactory pf, LoadableProgram p)
     {
         return new WiredNode(id, pf, p);
@@ -187,6 +193,7 @@ public class WiredSimulation extends Simulation
      *             if there is a problem loading any of the files or
      *             instantiating the simulation
      */
+    @Override
     public void process(Options o, String[] args) throws Exception
     {
         options.process(o);
@@ -203,6 +210,7 @@ public class WiredSimulation extends Simulation
     }
 
 
+    @Override
     protected void instantiateNodes()
     {
         super.instantiateNodes();

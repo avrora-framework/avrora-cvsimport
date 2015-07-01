@@ -32,15 +32,18 @@
 
 package avrora.avrora.test;
 
+import java.util.Properties;
+
 import avrora.avrora.arch.legacy.LegacyDisassembler;
 import avrora.avrora.arch.legacy.LegacyInstr;
 import avrora.avrora.core.Program;
 import avrora.avrora.core.ProgramReader;
 import avrora.avrora.syntax.Module;
 import avrora.avrora.syntax.objdump.ObjDump2ProgramReader;
-import avrora.cck.test.*;
+import avrora.cck.test.TestCase;
+import avrora.cck.test.TestEngine;
+import avrora.cck.test.TestResult;
 import avrora.cck.text.StringUtil;
-import java.util.Properties;
 
 /**
  * The <code>SimulatorTestHarness</code> implements a test harness that
@@ -68,6 +71,7 @@ public class DisassemblerTestHarness implements TestEngine.Harness
         }
 
 
+        @Override
         public void run() throws Exception
         {
             ProgramReader r = new ObjDump2ProgramReader();
@@ -94,6 +98,7 @@ public class DisassemblerTestHarness implements TestEngine.Harness
         }
 
 
+        @Override
         public TestResult match(Throwable t)
         {
 
@@ -119,6 +124,7 @@ public class DisassemblerTestHarness implements TestEngine.Harness
     }
 
 
+    @Override
     public TestCase newTestCase(String fname, Properties props) throws Exception
     {
         return new DisassemblerTest(fname, props);

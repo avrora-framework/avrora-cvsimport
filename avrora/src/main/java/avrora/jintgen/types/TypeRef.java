@@ -34,11 +34,14 @@
 
 package avrora.jintgen.types;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import avrora.cck.parser.AbstractToken;
 import avrora.cck.parser.SourcePoint;
 import avrora.cck.util.Util;
 import avrora.jintgen.isdl.parser.Token;
-import java.util.*;
 
 /**
  * The <code>TypeRef</code> class represents a reference to a type within a
@@ -143,6 +146,7 @@ public class TypeRef implements Typeable
     }
 
 
+    @Override
     public String toString()
     {
         StringBuffer buf = new StringBuffer();
@@ -192,6 +196,7 @@ public class TypeRef implements Typeable
     }
 
 
+    @Override
     public Type getType()
     {
         if (type == null)
@@ -201,6 +206,7 @@ public class TypeRef implements Typeable
     }
 
 
+    @Override
     public SourcePoint getSourcePoint()
     {
         return tcName.getSourcePoint();

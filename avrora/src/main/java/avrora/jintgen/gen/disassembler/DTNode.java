@@ -32,7 +32,15 @@
 
 package avrora.jintgen.gen.disassembler;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * The <code>DTNode</code> class represents a node in a decoding tree or graph.
@@ -53,6 +61,7 @@ public class DTNode
 {
 
     public static Comparator<Map.Entry<Integer, DTNode>> EDGE_COMPARATOR = new Comparator<Map.Entry<Integer, DTNode>>() {
+        @Override
         public int compare(Map.Entry<Integer, DTNode> a,
                 Map.Entry<Integer, DTNode> b)
         {
@@ -135,6 +144,7 @@ public class DTNode
      * 
      * @return an integer hash code for this node
      */
+    @Override
     public int hashCode()
     {
         if (needHash)
@@ -161,6 +171,7 @@ public class DTNode
      *            the object to test equality against
      * @return true if the nodes are equal; false otherwise
      */
+    @Override
     public boolean equals(Object o)
     {
         if (!(o instanceof DTNode))
@@ -304,7 +315,7 @@ public class DTNode
      */
     public void addPreOrder(List<DTNode> list, Set<Integer> seen)
     {
-        if (seen.contains(this))
+        if (seen.contains(this.number))
             return;
         seen.add(number);
         list.add(this);

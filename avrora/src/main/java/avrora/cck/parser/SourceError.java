@@ -103,6 +103,7 @@ public class SourceError extends Util.Error
      * for the user. For source errors, this method will report the file, line
      * number, and column number where this error occurred.
      */
+    @Override
     public void report()
     {
         SourcePoint pt = point == null
@@ -120,11 +121,42 @@ public class SourceError extends Util.Error
     }
 
 
-    public boolean equals(Object o)
+    @Override
+    public int hashCode()
     {
-        if (this == o)
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((errorType == null) ? 0 : errorType.hashCode());
+        return result;
+    }
+
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
             return true;
-        return o instanceof String && errorType.equals(o);
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        SourceError other = (SourceError) obj;
+        if (errorType == null)
+        {
+            if (other.errorType != null)
+                return false;
+        } else if (!errorType.equals(other.errorType))
+            return false;
+
+        // TODO: remove string check when we know it's not necessary
+        if (obj.getClass().equals(String.class))
+        {
+            throw new IllegalStateException(
+                    "call of equals() with Sring operand");
+        }
+
+        return true;
     }
 
 

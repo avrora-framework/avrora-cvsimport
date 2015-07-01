@@ -32,10 +32,13 @@
 
 package avrora.avrora.stack;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+
 import avrora.avrora.core.Program;
 import avrora.cck.text.StringUtil;
 import avrora.cck.util.Util;
-import java.util.*;
 
 /**
  * The <code>StateSpace</code> class represents the reachable state space as it
@@ -79,12 +82,14 @@ public class StateCache
         }
 
 
+        @Override
         public int hashCode()
         {
             return hashCode;
         }
 
 
+        @Override
         public boolean equals(Object o)
         {
             if (this == o)
@@ -144,12 +149,14 @@ public class StateCache
             boolean done;
 
 
+            @Override
             public boolean hasNext()
             {
                 return !done && oneState != null;
             }
 
 
+            @Override
             public State next()
             {
                 done = true;
@@ -157,6 +164,7 @@ public class StateCache
             }
 
 
+            @Override
             public void remove()
             {
                 throw Util.unimplemented();
@@ -334,7 +342,7 @@ public class StateCache
     public State getStateFor(MutableState s)
     {
         State is = new State(s);
-        State cs = (State) stateMap.get(is);
+        State cs = stateMap.get(is);
 
         if (cs != null)
         {

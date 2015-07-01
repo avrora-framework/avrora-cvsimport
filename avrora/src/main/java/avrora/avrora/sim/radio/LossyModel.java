@@ -20,9 +20,12 @@
  */
 package avrora.avrora.sim.radio;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 import avrora.avrora.sim.state.Complex;
-import avrora.avrora.sim.radio.Topology;
 
 /**
  * The <code>LossyModel</code> definition.
@@ -47,6 +50,7 @@ public class LossyModel implements Medium.Arbitrator
     }
 
 
+    @Override
     public boolean lockTransmission(Medium.Receiver receiver,
             Medium.Transmission trans, int Milliseconds)
     {
@@ -63,6 +67,7 @@ public class LossyModel implements Medium.Arbitrator
     }
 
 
+    @Override
     public char mergeTransmissions(Medium.Receiver receiver,
             List<Medium.Transmission> it, long bit, int Milliseconds)
     {
@@ -140,6 +145,7 @@ public class LossyModel implements Medium.Arbitrator
     }
 
 
+    @Override
     public int getNoise(int index)
     {
         if (noise.sizeNoise() == 1)
@@ -157,8 +163,8 @@ public class LossyModel implements Medium.Arbitrator
     {
         // Distance computed from mote 3D coordinates of topology file
         double dist = 0;
-        Topology.Position a = (Topology.Position) positions.get(t);
-        Topology.Position b = (Topology.Position) positions.get(r);
+        Topology.Position a = positions.get(t);
+        Topology.Position b = positions.get(r);
         if (a != null && b != null)
         {
             double dx = a.x - b.x;
@@ -177,8 +183,8 @@ public class LossyModel implements Medium.Arbitrator
          * and receiver motes inserted in topology file
          */
         double rho = 0D;
-        Topology.Position a = (Topology.Position) positions.get(t);
-        Topology.Position b = (Topology.Position) positions.get(r);
+        Topology.Position a = positions.get(t);
+        Topology.Position b = positions.get(r);
         if (a != null && b != null)
         {
             rho = Math.max(a.rho, b.rho);
@@ -196,6 +202,7 @@ public class LossyModel implements Medium.Arbitrator
      * @param Millisecons
      * @return received power (dBm)
      */
+    @Override
     public double computeReceivedPower(Medium.Transmission t,
             Medium.Receiver receiver, int Milliseconds)
     {

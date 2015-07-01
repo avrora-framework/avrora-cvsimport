@@ -34,10 +34,10 @@ package avrora.avrora.sim.platform;
 
 import avrora.avrora.sim.FiniteStateMachine;
 import avrora.avrora.sim.Simulator;
-import avrora.avrora.sim.output.SimPrinter;
 import avrora.avrora.sim.clock.Clock;
 import avrora.avrora.sim.mcu.ATMegaFamily;
 import avrora.avrora.sim.mcu.Microcontroller;
+import avrora.avrora.sim.output.SimPrinter;
 import avrora.cck.text.Terminal;
 
 /**
@@ -172,12 +172,14 @@ public class PinWire
         }
 
 
+        @Override
         public void fireBeforeTransition(int beforeState, int afterState)
         {
             // do nothing
         }
 
 
+        @Override
         public void fireAfterTransition(int beforeState, int afterState)
         {
             if (beforeState == afterState)
@@ -226,6 +228,7 @@ public class PinWire
          *
          * @return true if the level of the pin is high; false otherwise
          */
+        @Override
         public boolean read()
         {
             // read the current state and return boolean value
@@ -275,6 +278,7 @@ public class PinWire
          * @param level
          *            a boolean representing the logical level of the write
          */
+        @Override
         public void write(boolean level)
         {
 
@@ -300,6 +304,7 @@ public class PinWire
 
 
             // propagate signal to the pin finally
+            @Override
             public void fire()
             {
                 if (value)

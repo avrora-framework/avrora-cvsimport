@@ -32,7 +32,9 @@
 
 package avrora.avrora.monitors;
 
-import avrora.avrora.arch.legacy.*;
+import avrora.avrora.arch.legacy.LegacyInstr;
+import avrora.avrora.arch.legacy.LegacyRegister;
+import avrora.avrora.arch.legacy.LegacyState;
 import avrora.avrora.core.Program;
 import avrora.avrora.core.SourceMapping;
 import avrora.avrora.sim.Simulator;
@@ -78,6 +80,7 @@ public class IcallMonitor extends MonitorFactory
         public class IcallProbe extends Simulator.Probe.Empty
         {
 
+            @Override
             public void fireBefore(State state, int pc)
             {
                 reportIndirectCall(state, pc);
@@ -110,6 +113,7 @@ public class IcallMonitor extends MonitorFactory
         }
 
 
+        @Override
         public void report()
         {
             // do nothing
@@ -126,6 +130,7 @@ public class IcallMonitor extends MonitorFactory
     }
 
 
+    @Override
     public Monitor newMonitor(Simulator s)
     {
         return new Mon(s);

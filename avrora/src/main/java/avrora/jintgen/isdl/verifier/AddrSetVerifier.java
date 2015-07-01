@@ -34,10 +34,19 @@
 
 package avrora.jintgen.isdl.verifier;
 
-import avrora.jintgen.isdl.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import avrora.jintgen.isdl.AddrModeDecl;
+import avrora.jintgen.isdl.AddrModeSetDecl;
+import avrora.jintgen.isdl.ArchDecl;
+import avrora.jintgen.isdl.OperandTypeDecl;
+import avrora.jintgen.isdl.OperandTypeRef;
 import avrora.jintgen.isdl.parser.Token;
 import avrora.jintgen.types.Type;
-import java.util.*;
 
 /**
  * @author Ben L. Titzer
@@ -51,6 +60,7 @@ public class AddrSetVerifier extends VerifierPass
     }
 
 
+    @Override
     public void verify()
     {
 
@@ -62,7 +72,10 @@ public class AddrSetVerifier extends VerifierPass
             {
                 AddrModeDecl am = arch.getAddressingMode(t.image);
                 if (am == null)
+                {
                     ERROR.UnresolvedAddressingMode(t);
+                    throw new IllegalStateException("unresolved address");
+                }
                 as.addrModes.add(am);
                 am.joinSet(as);
                 unifyAddressingMode(unions, am, as, alloperands, t);
@@ -185,7 +198,11 @@ public class AddrSetVerifier extends VerifierPass
             {
                 OperandTypeDecl.Union ut = unions.get(o.name.image);
                 if (ut == null)
+                {
                     ERROR.ExtraOperandInAddrModeUnification(as.name, t, o.name);
+                    throw new IllegalStateException(
+                            "cannot unify addressing mode");
+                }
 
                 ut.addType(o.typeRef.getOperandTypeDecl());
                 operands.add(o.name.image);

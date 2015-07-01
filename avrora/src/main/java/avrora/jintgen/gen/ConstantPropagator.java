@@ -32,10 +32,23 @@
 
 package avrora.jintgen.gen;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+
 import avrora.cck.util.Arithmetic;
 import avrora.cck.util.Util;
-import avrora.jintgen.jigir.*;
-import java.util.*;
+import avrora.jintgen.jigir.AssignStmt;
+import avrora.jintgen.jigir.BinOpExpr;
+import avrora.jintgen.jigir.DeclStmt;
+import avrora.jintgen.jigir.Expr;
+import avrora.jintgen.jigir.FixedRangeExpr;
+import avrora.jintgen.jigir.IndexExpr;
+import avrora.jintgen.jigir.Literal;
+import avrora.jintgen.jigir.Stmt;
+import avrora.jintgen.jigir.StmtRebuilder;
+import avrora.jintgen.jigir.UnOpExpr;
+import avrora.jintgen.jigir.VarExpr;
 
 /**
  * @author Ben L. Titzer
@@ -49,7 +62,7 @@ public class ConstantPropagator
     protected static Literal.BoolExpr TRUE = new Literal.BoolExpr(true);
     protected static Literal.BoolExpr FALSE = new Literal.BoolExpr(false);
 
-    protected static HashSet<String> trackedMaps;
+    private static HashSet<String> trackedMaps;
 
     public class Environ
     {
@@ -158,7 +171,7 @@ public class ConstantPropagator
             HashMap<Integer, Expr> map = mapMap.get(mapname);
             if (map != null)
             {
-                mapMap.remove(new Integer(index));
+                map.remove(new Integer(index));
             }
 
             if (parent != null)
@@ -204,8 +217,14 @@ public class ConstantPropagator
 
     public ConstantPropagator()
     {
-        trackedMaps = new HashSet<String>();
-        trackedMaps.add("regs"); // this is all for now
+        resetTrackedMaps();
+        ConstantPropagator.trackedMaps.add("regs"); // this is all for now
+    }
+
+
+    private void resetTrackedMaps()
+    {
+        ConstantPropagator.trackedMaps = new HashSet<String>();
     }
 
 
@@ -221,6 +240,7 @@ public class ConstantPropagator
     }
 
 
+    @Override
     public Stmt visit(DeclStmt s, Environ cenv)
     {
         Expr ne = update(s.name.toString(), s.init, cenv);
@@ -231,6 +251,7 @@ public class ConstantPropagator
     }
 
 
+    @Override
     public Stmt visit(AssignStmt s, Environ cenv)
     {
         throw Util.unimplemented();
@@ -266,6 +287,7 @@ public class ConstantPropagator
     }
 
 
+    @Override
     public Expr visit(VarExpr e, Environ cenv)
     {
         Expr ce = cenv.lookup(e.variable.toString());
@@ -276,6 +298,7 @@ public class ConstantPropagator
     }
 
 
+    @Override
     public Expr visit(IndexExpr e, Environ cenv)
     {
         Expr nexpr = e.expr.accept(this, cenv);
@@ -295,6 +318,7 @@ public class ConstantPropagator
     }
 
 
+    @Override
     public Expr visit(FixedRangeExpr e, Environ cenv)
     {
         Expr nexpr = e.expr.accept(this, cenv);
@@ -315,6 +339,7 @@ public class ConstantPropagator
 
     // --- binary operations ---
 
+    @Override
     public Expr visit(BinOpExpr e, Environ cenv)
     {
         Expr l = e.left.accept(this, cenv);
@@ -329,6 +354,7 @@ public class ConstantPropagator
     }
 
 
+    @Override
     public Expr visit(Literal.BoolExpr e, Environ cenv)
     {
         if (e.value)
@@ -338,6 +364,7 @@ public class ConstantPropagator
     }
 
 
+    @Override
     public Expr visit(Literal.IntExpr e, Environ cenv)
     {
         if (e.value == 0)
@@ -349,6 +376,7 @@ public class ConstantPropagator
     }
 
 
+    @Override
     public Expr visit(UnOpExpr e, Environ cenv)
     {
         Expr ne = e.expr.accept(this, cenv);

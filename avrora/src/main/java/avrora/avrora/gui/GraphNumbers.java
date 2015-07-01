@@ -32,13 +32,25 @@
 
 package avrora.avrora.gui;
 
-import avrora.cck.stat.Sequence;
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JSpinner;
+import javax.swing.OverlayLayout;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import avrora.cck.stat.Sequence;
 
 /**
  * The class assists visual monitors with graphing time-series data values. It
@@ -320,6 +332,7 @@ public class GraphNumbers extends JPanel
      * @param g
      *            The graphic that represents the panel to be painted
      */
+    @Override
     public void paint(Graphics g)
     {
 
@@ -444,6 +457,7 @@ public class GraphNumbers extends JPanel
      * @param e
      *            Info about the event that happened
      */
+    @Override
     public void stateChanged(ChangeEvent e)
     {
         if (e.getSource() == stepsizeVisual)
@@ -473,6 +487,7 @@ public class GraphNumbers extends JPanel
      * @param e
      *            Info about the event that happened
      */
+    @Override
     public void adjustmentValueChanged(AdjustmentEvent e)
     {
         repaint();

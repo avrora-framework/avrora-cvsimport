@@ -32,13 +32,19 @@
 
 package avrora.jintgen.isdl;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+
 import avrora.cck.text.StringUtil;
 import avrora.cck.util.Util;
 import avrora.jintgen.isdl.parser.Token;
 import avrora.jintgen.jigir.CodeRegion;
 import avrora.jintgen.jigir.JIGIRTypeEnv;
-import avrora.jintgen.types.*;
-import java.util.*;
+import avrora.jintgen.types.Type;
+import avrora.jintgen.types.TypeCon;
+import avrora.jintgen.types.TypeRef;
 
 /**
  * The <code>OperandDecl</code> class represents the declaration of a set of
@@ -168,12 +174,14 @@ public abstract class OperandTypeDecl extends Item
         }
 
 
+        @Override
         public boolean isValue()
         {
             return true;
         }
 
 
+        @Override
         public void addSubOperand(AddrModeDecl.Operand o)
         {
             throw Util
@@ -181,6 +189,7 @@ public abstract class OperandTypeDecl extends Item
         }
 
 
+        @Override
         public boolean isRelative()
         {
             Type t = typeRef.getType();
@@ -192,6 +201,7 @@ public abstract class OperandTypeDecl extends Item
         }
 
 
+        @Override
         public boolean isEnum()
         {
             TypeCon typeCon = typeRef.getType().getTypeCon();
@@ -199,12 +209,14 @@ public abstract class OperandTypeDecl extends Item
         }
 
 
+        @Override
         public boolean isSigned()
         {
             return signed;
         }
 
 
+        @Override
         public boolean isAddress()
         {
             return typeRef.isBasedOn("address");
@@ -224,6 +236,7 @@ public abstract class OperandTypeDecl extends Item
         }
 
 
+        @Override
         public boolean isCompound()
         {
             return true;
@@ -246,6 +259,7 @@ public abstract class OperandTypeDecl extends Item
         }
 
 
+        @Override
         public boolean isUnion()
         {
             return true;

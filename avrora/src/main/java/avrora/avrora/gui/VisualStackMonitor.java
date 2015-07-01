@@ -32,10 +32,14 @@
 
 package avrora.avrora.gui;
 
-import avrora.avrora.sim.*;
+import java.awt.BorderLayout;
+
+import javax.swing.JPanel;
+
+import avrora.avrora.sim.Simulation;
+import avrora.avrora.sim.Simulator;
+import avrora.avrora.sim.State;
 import avrora.avrora.sim.mcu.MCUProperties;
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * The <code>VisualStackMonitor</code> class is a monitor that tracks the
@@ -65,6 +69,7 @@ public class VisualStackMonitor extends SingleNodeMonitor
             boolean init;
 
 
+            @Override
             public void fireAfterWrite(State s, int addr, byte val)
             {
                 init = true;
@@ -79,6 +84,7 @@ public class VisualStackMonitor extends SingleNodeMonitor
         }
 
 
+        @Override
         public void fire()
         {
             // this method is fired every cycle and records the stack pointer
@@ -94,6 +100,7 @@ public class VisualStackMonitor extends SingleNodeMonitor
         }
 
 
+        @Override
         public void construct(Simulator s)
         {
             // This is where we should set up the graph panel itself (aka the
@@ -129,18 +136,21 @@ public class VisualStackMonitor extends SingleNodeMonitor
         }
 
 
+        @Override
         public void destruct()
         {
             simulator.removeEvent(this);
         }
 
 
+        @Override
         public void remove()
         {
             simulator.removeEvent(this);
         }
 
 
+        @Override
         public void update()
         {
             if (graph.internalUpdate())
@@ -164,6 +174,7 @@ public class VisualStackMonitor extends SingleNodeMonitor
     }
 
 
+    @Override
     protected SingleNodePanel newPanel(Simulation.Node n, MonitorPanel p)
     {
         return new SPMon(n, p);

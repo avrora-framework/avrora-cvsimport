@@ -38,14 +38,14 @@ package avrora.avrora.sim.platform;
 
 import avrora.avrora.sim.FiniteStateMachine;
 import avrora.avrora.sim.Simulator;
+import avrora.avrora.sim.clock.Clock;
+import avrora.avrora.sim.energy.Energy;
+import avrora.avrora.sim.mcu.Microcontroller;
 import avrora.avrora.sim.output.SimPrinter;
 import avrora.avrora.sim.state.BooleanView;
 import avrora.avrora.sim.state.BooleanView.ValueSetListener;
 import avrora.avrora.sim.state.Register;
 import avrora.avrora.sim.state.RegisterUtil;
-import avrora.avrora.sim.clock.Clock;
-import avrora.avrora.sim.energy.Energy;
-import avrora.avrora.sim.mcu.Microcontroller;
 import avrora.cck.text.Terminal;
 
 /**
@@ -173,6 +173,7 @@ public class ExternalFlash
     }
 
 
+    @SuppressWarnings("unused")
     public ExternalFlash(Microcontroller mcunit, int numPages, int pageBytes)
     {
         memory = new Memory(numPages, pageBytes);
@@ -293,6 +294,7 @@ public class ExternalFlash
     protected class PA3Output implements Microcontroller.Pin.Output
     {
         // Flash_CS is connected inverted
+        @Override
         public void write(boolean level)
         {
             if (!level && !isSelected)
@@ -449,6 +451,7 @@ public class ExternalFlash
     protected class PD3Output implements Microcontroller.Pin.Output
     {
 
+        @Override
         public void write(boolean level)
         {
             si = level;
@@ -461,6 +464,7 @@ public class ExternalFlash
         private short temp;
 
 
+        @Override
         public void write(boolean level)
         {
             if (isSelected)
@@ -757,6 +761,7 @@ public class ExternalFlash
 
 
         // connected to serial output of dataflash
+        @Override
         public boolean read()
         {
             return so.getValue();
@@ -777,6 +782,7 @@ public class ExternalFlash
          *
          * @see Simulator.Event#fire()
          */
+        @Override
         public void fire()
         {
             // operation finished

@@ -73,12 +73,16 @@ public class InteractiveMonitor extends MonitorFactory
             {
                 SourceMapping.Location l = sourceMap.getLocation(str);
                 if (l == null)
+                {
                     Util.userError("Label not found", str);
+                    throw new IllegalStateException("label not found");
+                }
                 simulator.insertProbe(new BreakPointProbe(), l.lma_addr);
             }
         }
 
 
+        @Override
         public void report()
         {
             // do nothing.
@@ -111,6 +115,7 @@ public class InteractiveMonitor extends MonitorFactory
      * @return a new monitor that tracks the call and return behavior of the
      *         simulator as it executes
      */
+    @Override
     public Monitor newMonitor(Simulator s)
     {
         return new Mon(s);
@@ -118,6 +123,7 @@ public class InteractiveMonitor extends MonitorFactory
 
     public static class BreakPointProbe extends Simulator.Probe.Empty
     {
+        @Override
         public void fireBefore(State s, int pc)
         {
             throw new SimAction.BreakPointException(pc, s);

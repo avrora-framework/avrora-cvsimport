@@ -32,12 +32,15 @@
 
 package avrora.avrora.sim.mcu;
 
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.NoSuchElementException;
+
 import avrora.cck.text.StringUtil;
 import avrora.cck.util.Arithmetic;
 import avrora.cck.util.Util;
-import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
-import java.util.*;
 
 /**
  * The <code>RegisterLayout</code> class stores information about the IO
@@ -224,7 +227,7 @@ public class RegisterLayout
      */
     public int getIOReg(String n)
     {
-        RegisterInfo i = (RegisterInfo) ioregAssignments.get(n);
+        RegisterInfo i = ioregAssignments.get(n);
         if (i == null)
             throw new NoSuchElementException(
                     StringUtil.quote(n) + " IO register not found");
@@ -411,7 +414,7 @@ public class RegisterLayout
 
     private Field getField(String name)
     {
-        Field f = (Field) fields.get(name);
+        Field f = fields.get(name);
         if (f == null)
         {
             f = new Field(name);

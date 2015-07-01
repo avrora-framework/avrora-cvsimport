@@ -32,15 +32,39 @@
 
 package avrora.jintgen.gen;
 
-import avrora.cck.text.*;
-import avrora.cck.util.Option;
-import avrora.cck.util.Util;
-import avrora.jintgen.isdl.*;
-import avrora.jintgen.isdl.parser.Token;
-import avrora.jintgen.jigir.*;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.List;
+
+import avrora.cck.text.Printer;
+import avrora.cck.text.SectionFile;
+import avrora.cck.text.StringUtil;
+import avrora.cck.util.Option;
+import avrora.cck.util.Util;
+import avrora.jintgen.isdl.AddrModeDecl;
+import avrora.jintgen.isdl.InstrDecl;
+import avrora.jintgen.isdl.parser.Token;
+import avrora.jintgen.jigir.AssignStmt;
+import avrora.jintgen.jigir.BinOpExpr;
+import avrora.jintgen.jigir.CallExpr;
+import avrora.jintgen.jigir.CallStmt;
+import avrora.jintgen.jigir.CodeVisitor;
+import avrora.jintgen.jigir.CommentStmt;
+import avrora.jintgen.jigir.ConversionExpr;
+import avrora.jintgen.jigir.DeclStmt;
+import avrora.jintgen.jigir.DotExpr;
+import avrora.jintgen.jigir.Expr;
+import avrora.jintgen.jigir.FixedRangeExpr;
+import avrora.jintgen.jigir.IfStmt;
+import avrora.jintgen.jigir.IndexExpr;
+import avrora.jintgen.jigir.Literal;
+import avrora.jintgen.jigir.ReadExpr;
+import avrora.jintgen.jigir.ReturnStmt;
+import avrora.jintgen.jigir.Stmt;
+import avrora.jintgen.jigir.StmtVisitor;
+import avrora.jintgen.jigir.UnOpExpr;
+import avrora.jintgen.jigir.VarExpr;
+import avrora.jintgen.jigir.WriteStmt;
 
 /**
  * @author Ben L. Titzer
@@ -57,6 +81,7 @@ public class CodemapGenerator extends Generator
                     + "code map.");
 
 
+    @Override
     public void generate() throws Exception
     {
         if (CODEMAP_FILE.isBlank())
@@ -200,6 +225,7 @@ public class CodemapGenerator extends Generator
         int lastblock;
 
 
+        @Override
         public void visit(CallStmt s)
         {
             printer.print("stmt = new CallStmt(");
@@ -210,24 +236,28 @@ public class CodemapGenerator extends Generator
         }
 
 
+        @Override
         public void visit(WriteStmt s)
         {
             throw Util.unimplemented();
         }
 
 
+        @Override
         public void visit(CommentStmt s)
         {
             printer.println(s.toString());
         }
 
 
+        @Override
         public void visit(DeclStmt s)
         {
             generate("DeclStmt", s.name, s.typeRef, s.init);
         }
 
 
+        @Override
         public void visit(IfStmt s)
         {
             String ltrue = generateBlock(s.trueBranch, null);
@@ -236,6 +266,7 @@ public class CodemapGenerator extends Generator
         }
 
 
+        @Override
         public void visit(ReturnStmt s)
         {
             printer.print("stmt = new ReturnStmt(");
@@ -244,30 +275,35 @@ public class CodemapGenerator extends Generator
         }
 
 
+        @Override
         public void visit(AssignStmt s)
         {
             throw Util.unimplemented();
         }
 
 
+        @Override
         public void visit(AssignStmt.Var s)
         {
             throw Util.unimplemented();
         }
 
 
+        @Override
         public void visit(AssignStmt.Map s)
         {
             throw Util.unimplemented();
         }
 
 
+        @Override
         public void visit(AssignStmt.Bit s)
         {
             throw Util.unimplemented();
         }
 
 
+        @Override
         public void visit(AssignStmt.FixedRange s)
         {
             throw Util.unimplemented();
@@ -341,12 +377,14 @@ public class CodemapGenerator extends Generator
 
         // - Begin real visitor code
 
+        @Override
         public void visit(BinOpExpr e)
         {
             generate(e, "AddExpr");
         }
 
 
+        @Override
         public void visit(IndexExpr e)
         {
             printer.print("new IndexExpr(");
@@ -357,6 +395,7 @@ public class CodemapGenerator extends Generator
         }
 
 
+        @Override
         public void visit(FixedRangeExpr e)
         {
             printer.print("new FixedRangeExpr(");
@@ -365,6 +404,7 @@ public class CodemapGenerator extends Generator
         }
 
 
+        @Override
         public void visit(CallExpr e)
         {
             printer.print("new CallExpr(" + StringUtil.quote(e.method) + ", ");
@@ -373,12 +413,14 @@ public class CodemapGenerator extends Generator
         }
 
 
+        @Override
         public void visit(ReadExpr e)
         {
             throw Util.unimplemented();
         }
 
 
+        @Override
         public void visit(ConversionExpr e)
         {
             printer.print("new ConversionExpr(");
@@ -388,30 +430,35 @@ public class CodemapGenerator extends Generator
         }
 
 
+        @Override
         public void visit(Literal.BoolExpr e)
         {
             printer.print("new Literal.BoolExpr(" + e.value + ')');
         }
 
 
+        @Override
         public void visit(Literal.IntExpr e)
         {
             printer.print("new Literal.IntExpr(" + e.value + ')');
         }
 
 
+        @Override
         public void visit(Literal.EnumVal e)
         {
             throw Util.unimplemented();
         }
 
 
+        @Override
         public void visit(UnOpExpr e)
         {
             generate(e, "UnOpExpr");
         }
 
 
+        @Override
         public void visit(VarExpr e)
         {
             String name = e.variable.toString();
@@ -431,6 +478,7 @@ public class CodemapGenerator extends Generator
         }
 
 
+        @Override
         public void visit(DotExpr e)
         {
             throw Util.unimplemented();

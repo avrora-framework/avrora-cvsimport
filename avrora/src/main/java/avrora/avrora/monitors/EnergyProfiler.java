@@ -35,16 +35,18 @@
 
 package avrora.avrora.monitors;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+
 import avrora.avrora.arch.legacy.LegacyInstr;
 import avrora.avrora.core.ControlFlowGraph.Block;
 import avrora.avrora.core.Program;
 import avrora.avrora.core.SourceMapping;
 import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.State;
-import avrora.cck.text.Terminal;
 import avrora.cck.text.TermUtil;
-
-import java.util.*;
+import avrora.cck.text.Terminal;
 
 /**
  * The <code>EnergyProfiler</code> class is a monitor that tracks the power
@@ -216,6 +218,7 @@ public class EnergyProfiler extends MonitorFactory
          * it during program execution. Addionally the number of cycles spent in
          * sleep mode is provided.
          */
+        @Override
         public void report()
         {
             // log current state
@@ -265,6 +268,7 @@ public class EnergyProfiler extends MonitorFactory
              *
              * @see Simulator.Probe#fireBefore(State,int)
              */
+            @Override
             public void fireBefore(State s, int pc)
             {
                 long cycles = simulator.getState().getCycles() - lastChange;
@@ -281,7 +285,7 @@ public class EnergyProfiler extends MonitorFactory
                     }
                 }
                 lastChange = simulator.getState().getCycles();
-                currentMode = (EnergyProfile) labelLookup.get(new Integer(pc));
+                currentMode = labelLookup.get(new Integer(pc));
             }
 
         }
@@ -299,6 +303,7 @@ public class EnergyProfiler extends MonitorFactory
              *
              * @see Simulator.Probe#fireBefore(State,int)
              */
+            @Override
             public void fireBefore(State s, int pc)
             {
                 long cycles = simulator.getState().getCycles() - lastChange;
@@ -345,6 +350,7 @@ public class EnergyProfiler extends MonitorFactory
      * @return an instance of the <code>Monitor</code> interface for the
      *         specified simulator
      */
+    @Override
     public avrora.avrora.monitors.Monitor newMonitor(Simulator s)
     {
         return new Monitor(s);

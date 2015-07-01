@@ -32,9 +32,9 @@
 
 package avrora.avrora.sim;
 
-import avrora.cck.util.Arithmetic;
 import avrora.avrora.sim.state.AbstractRegisterView;
 import avrora.avrora.sim.state.RegisterView;
+import avrora.cck.util.Arithmetic;
 
 /**
  * The <code>RWRegister</code> class is an implementation of an IO register that
@@ -57,6 +57,7 @@ public class RWRegister extends AbstractRegisterView
      *
      * @return the value of the register as a byte
      */
+    @Override
     public byte read()
     {
         return value;
@@ -71,6 +72,7 @@ public class RWRegister extends AbstractRegisterView
      * @param val
      *            the value to write
      */
+    @Override
     public void write(byte val)
     {
         byte old = value;
@@ -93,18 +95,21 @@ public class RWRegister extends AbstractRegisterView
     }
 
 
+    @Override
     public int getWidth()
     {
         return 8;
     }
 
 
+    @Override
     public int getValue()
     {
         return value;
     }
 
 
+    @Override
     public void setValue(int val)
     {
         byte old = value;

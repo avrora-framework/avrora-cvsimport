@@ -32,14 +32,18 @@
 
 package avrora.avrora.gui;
 
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.util.Vector;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import avrora.avrora.core.Program;
-import avrora.avrora.monitors.MonitorFactory;
 import avrora.avrora.monitors.Monitor;
+import avrora.avrora.monitors.MonitorFactory;
 import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.util.ProgramProfiler;
-import javax.swing.*;
-import java.awt.*;
-import java.util.Vector;
 
 /**
  * This is a prototype for a "global monitor." Several different nodes are all
@@ -72,17 +76,17 @@ public class VisualRadioMonitor extends MonitorFactory
 
     static
     {
-        masterPanel = new JPanel();
-        masterPanel.setLayout(new GridLayout(1, 1));
-        optionsPanel = new JPanel(false);
+        VisualRadioMonitor.masterPanel = new JPanel();
+        VisualRadioMonitor.masterPanel.setLayout(new GridLayout(1, 1));
+        VisualRadioMonitor.optionsPanel = new JPanel(false);
         JLabel optionsFiller = new JLabel(
                 "Options for the monitor can be set here. ");
-        optionsPanel.setLayout(new GridLayout(1, 1));
-        optionsPanel.add(optionsFiller);
-        isDisplayed = false;
-        allCurrentMonitors = new Vector<VisualMonitor>();
-        allCurrentGraphEvents = new Vector<GraphEvents>();
-        numofnodes = 1;
+        VisualRadioMonitor.optionsPanel.setLayout(new GridLayout(1, 1));
+        VisualRadioMonitor.optionsPanel.add(optionsFiller);
+        VisualRadioMonitor.isDisplayed = false;
+        VisualRadioMonitor.allCurrentMonitors = new Vector<VisualMonitor>();
+        VisualRadioMonitor.allCurrentGraphEvents = new Vector<GraphEvents>();
+        VisualRadioMonitor.numofnodes = 1;
     }
 
     public class VisualMonitor implements avrora.avrora.gui.VisualMonitor
@@ -97,6 +101,7 @@ public class VisualRadioMonitor extends MonitorFactory
         public Object vSync;
 
 
+        @Override
         public void updateDataAndPaint()
         {
             // So if there are new numbers that we added,
@@ -119,6 +124,7 @@ public class VisualRadioMonitor extends MonitorFactory
 
         // This is a quick hack to get things working...we'll have to
         // go back and rewrite to make things more generalized
+        @Override
         public GraphEvents getGraph()
         {
             return theGraph;
@@ -130,10 +136,12 @@ public class VisualRadioMonitor extends MonitorFactory
         // it is also where we init our graph and start the paint thread
         // Think of it as the constructor for the visual elements of this
         // monitor
+        @Override
         public void setVisualPanel(JPanel thePanel, JPanel theOptionsPanel)
         {
 
-            allCurrentMonitors.add(this); // for global access
+            VisualRadioMonitor.allCurrentMonitors.add(this); // for global
+                                                             // access
 
             visualPanel = thePanel;
 
@@ -144,7 +152,7 @@ public class VisualRadioMonitor extends MonitorFactory
 
             theGraph = new GraphEvents(0, 500, 3);
 
-            allCurrentGraphEvents.add(theGraph);
+            VisualRadioMonitor.allCurrentGraphEvents.add(theGraph);
 
             theGraph.setParentPanel(visualPanel);
             visualPanel.add(theGraph.chalkboardAndBar(), BorderLayout.CENTER);
@@ -169,14 +177,27 @@ public class VisualRadioMonitor extends MonitorFactory
          * simulation is complete. The report does nothing in this case, because
          * this is a visual monitor
          */
+        @Override
         public void report()
         {
             updateDataAndPaint(); // in case there is still stuff in the
                                   // queue...
             // we better take it out
             // destroy our static vector of monitors
-            allCurrentMonitors = new Vector<VisualMonitor>();
-            allCurrentGraphEvents = new Vector<GraphEvents>();
+            discardMonitors();
+            discardGraphEvents();
+        }
+
+
+        private void discardMonitors()
+        {
+            VisualRadioMonitor.allCurrentMonitors = new Vector<VisualMonitor>();
+        }
+
+
+        private void discardGraphEvents()
+        {
+            VisualRadioMonitor.allCurrentGraphEvents = new Vector<GraphEvents>();
         }
 
     }
@@ -203,6 +224,7 @@ public class VisualRadioMonitor extends MonitorFactory
      * @return an instance of the <code>Monitor</code> interface for the
      *         specified simulator
      */
+    @Override
     public Monitor newMonitor(Simulator s)
     {
         return new VisualMonitor(s);

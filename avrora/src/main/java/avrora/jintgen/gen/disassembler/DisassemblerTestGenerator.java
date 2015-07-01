@@ -32,11 +32,19 @@
 
 package avrora.jintgen.gen.disassembler;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import avrora.cck.text.Printer;
 import avrora.cck.util.Util;
-import avrora.jintgen.isdl.*;
-import java.io.*;
-import java.util.*;
+import avrora.jintgen.isdl.AddrModeDecl;
+import avrora.jintgen.isdl.ArchDecl;
+import avrora.jintgen.isdl.InstrDecl;
+import avrora.jintgen.isdl.OperandTypeDecl;
+import avrora.jintgen.isdl.Property;
 
 /**
  * @author Ben L. Titzer
@@ -47,8 +55,8 @@ public class DisassemblerTestGenerator
     ArchDecl archDecl;
     File directory;
     String dname;
-    Printer printer;
-    HashMap<OperandTypeDecl, ValueSet> operandValues;
+    Printer printer = Printer.STDOUT;
+    HashMap<OperandTypeDecl, ValueSet> operandValues  = new HashMap<>();
 
     public abstract class ValueSet
     {
@@ -72,12 +80,14 @@ public class DisassemblerTestGenerator
         }
 
 
+        @Override
         void getRepresentative(String name, HashMap<String, String> props)
         {
             props.put(name, list.iterator().next());
         }
 
 
+        @Override
         void enumerate(InstrDecl d, String syntax, String name,
                 HashMap<String, String> props)
         {
@@ -100,6 +110,7 @@ public class DisassemblerTestGenerator
         }
 
 
+        @Override
         void getRepresentative(String name, HashMap<String, String> props)
         {
             HashMap<String, String> map = values.iterator().next();
@@ -117,6 +128,7 @@ public class DisassemblerTestGenerator
         }
 
 
+        @Override
         void enumerate(InstrDecl d, String syntax, String name,
                 HashMap<String, String> props)
         {
@@ -239,7 +251,9 @@ public class DisassemblerTestGenerator
         {
             syntax = syntax.replaceAll('%' + e.getKey(), e.getValue());
         }
-        printer.print(d.name + " " + syntax);
+        if ( null != printer ) {
+            printer.print(d.name + " " + syntax);
+        }
     }
 
 }

@@ -35,16 +35,29 @@
 
 package avrora.avrora.gui;
 
-import avrora.avrora.sim.Simulation;
-import avrora.cck.text.Terminal;
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.io.PrintStream;
+import java.net.URL;
 import java.util.Hashtable;
 import java.util.Vector;
-import java.net.URL;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.JToolBar;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+
+import avrora.avrora.sim.Simulation;
+import avrora.cck.text.Terminal;
 
 /**
  * From a high level view, the controls what the simulation is doing. It can
@@ -68,7 +81,7 @@ public class ManageSimTime
     private JSlider simTimeSlider;
     private SpinnerNumberModel simTimeDelaySpinner;
     private SpinnerNumberModel simTimeCycleSpinner;
-    private JComboBox simTimeIorCSelect;
+    private JComboBox<String> simTimeIorCSelect;
 
     private static int[] simTimeDelayDefaults;
     private static int[] simTimeCycleDefaults;
@@ -87,7 +100,6 @@ public class ManageSimTime
      *
      * @return An instance of ManageSimTime
      */
-    @SuppressWarnings("unchecked")
     public static ManageSimTime createManageSimTime()
     {
         ManageSimTime thesetup = new ManageSimTime();
@@ -162,7 +174,7 @@ public class ManageSimTime
         Vector<String> iorcvector = new Vector<String>();
         iorcvector.add("cycles");
         iorcvector.add("instructions");
-        thesetup.simTimeIorCSelect = new JComboBox(iorcvector);
+        thesetup.simTimeIorCSelect = new JComboBox<>(iorcvector);
         thesetup.simTimeIorCSelect.addActionListener(AvroraGui.instance);
 
         // Toolbar

@@ -32,7 +32,9 @@
 
 package avrora.avrora.stack;
 
-import avrora.avrora.arch.legacy.*;
+import avrora.avrora.arch.legacy.LegacyInstr;
+import avrora.avrora.arch.legacy.LegacyInstrVisitor;
+import avrora.avrora.arch.legacy.LegacyRegister;
 import avrora.avrora.core.Program;
 import avrora.cck.text.StringUtil;
 import avrora.cck.util.Util;
@@ -145,6 +147,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     //
     // -----------------------------------------------------------------------
 
+    @Override
     public void visit(LegacyInstr.ADC i)
     { // add register to register with carry
         char r1 = state.getRegisterAV(i.r1);
@@ -154,6 +157,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.ADD i)
     { // add register to register
         char r1 = state.getRegisterAV(i.r1);
@@ -163,6 +167,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.ADIW i)
     {// add immediate to word register
         char rh = state.getRegisterAV(i.r1.nextRegister());
@@ -187,6 +192,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.AND i)
     {// and register with register
         char r1 = state.getRegisterAV(i.r1);
@@ -196,6 +202,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.ANDI i)
     {// and register with immediate
         char r1 = state.getRegisterAV(i.r1);
@@ -205,6 +212,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.ASR i)
     {// arithmetic shift right
         char val = state.getRegisterAV(i.r1);
@@ -213,12 +221,14 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.BCLR i)
     {// clear bit in status register
         state.setSREG_bit(i.imm1, FALSE);
     }
 
 
+    @Override
     public void visit(LegacyInstr.BLD i)
     {// load bit from T flag into register
         char T = state.getFlag_T();
@@ -228,6 +238,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRBC i)
     {// branch if bit in status register is clear
         char val = state.getSREG();
@@ -236,6 +247,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRBS i)
     {// branch if bit in status register is set
         char val = state.getSREG();
@@ -244,6 +256,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRCC i)
     {// branch if carry flag is clear
         char cond = state.getFlag_C();
@@ -251,6 +264,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRCS i)
     { // branch if carry flag is set
         char cond = state.getFlag_C();
@@ -258,18 +272,21 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.BREAK i)
     {// break
         state = null;
     }
 
 
+    @Override
     public void visit(LegacyInstr.BREQ i)
     {// branch if equal
         branchOnCondition(state.getFlag_Z(), i.imm1);
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRGE i)
     {// branch if greater or equal (signed)
         branchOnCondition(not(xor(state.getFlag_N(), state.getFlag_V())),
@@ -277,96 +294,112 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRHC i)
     {// branch if H flag is clear
         branchOnCondition(not(state.getFlag_H()), i.imm1);
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRHS i)
     {// branch if H flag is set
         branchOnCondition(state.getFlag_H(), i.imm1);
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRID i)
     {// branch if interrupts are disabled
         branchOnCondition(not(state.getFlag_I()), i.imm1);
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRIE i)
     {// branch if interrupts are enabled
         branchOnCondition(state.getFlag_I(), i.imm1);
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRLO i)
     { // branch if lower
         branchOnCondition(state.getFlag_C(), i.imm1);
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRLT i)
     { // branch if less than zero (signed)
         branchOnCondition(xor(state.getFlag_N(), state.getFlag_V()), i.imm1);
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRMI i)
     { // branch if minus
         branchOnCondition(state.getFlag_N(), i.imm1);
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRNE i)
     { // branch if not equal
         branchOnCondition(state.getFlag_Z(), i.imm1);
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRPL i)
     { // branch if positive
         branchOnCondition(not(state.getFlag_N()), i.imm1);
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRSH i)
     { // branch if same or higher
         branchOnCondition(not(state.getFlag_C()), i.imm1);
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRTC i)
     { // branch if T flag is clear
         branchOnCondition(not(state.getFlag_T()), i.imm1);
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRTS i)
     { // branch if T flag is set
         branchOnCondition(state.getFlag_T(), i.imm1);
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRVC i)
     { // branch if V flag is clear
         branchOnCondition(not(state.getFlag_V()), i.imm1);
     }
 
 
+    @Override
     public void visit(LegacyInstr.BRVS i)
     { // branch if V flag is set
         branchOnCondition(state.getFlag_V(), i.imm1);
     }
 
 
+    @Override
     public void visit(LegacyInstr.BSET i)
     { // set flag in status register
         state.setSREG_bit(i.imm1, TRUE);
     }
 
 
+    @Override
     public void visit(LegacyInstr.BST i)
     { // store bit in register into T flag
         char val = state.getRegisterAV(i.r1);
@@ -375,12 +408,14 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.CALL i)
     { // call absolute address
         state = policy.call(state, absolute(i.imm1));
     }
 
 
+    @Override
     public void visit(LegacyInstr.CBI i)
     { // clear bit in IO register
         char val = state.getIORegisterAV(i.imm1);
@@ -389,6 +424,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.CBR i)
     { // clear bits in register
         char r1 = state.getRegisterAV(i.r1);
@@ -398,30 +434,35 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.CLC i)
     { // clear C flag
         state.setFlag_C(FALSE);
     }
 
 
+    @Override
     public void visit(LegacyInstr.CLH i)
     { // clear H flag
         state.setFlag_H(FALSE);
     }
 
 
+    @Override
     public void visit(LegacyInstr.CLI i)
     { // clear I flag
         state.setFlag_I(FALSE);
     }
 
 
+    @Override
     public void visit(LegacyInstr.CLN i)
     { // clear N flag
         state.setFlag_N(FALSE);
     }
 
 
+    @Override
     public void visit(LegacyInstr.CLR i)
     { // clear register (set to zero)
         state.setFlag_S(FALSE);
@@ -432,30 +473,35 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.CLS i)
     { // clear S flag
         state.setFlag_S(FALSE);
     }
 
 
+    @Override
     public void visit(LegacyInstr.CLT i)
     { // clear T flag
         state.setFlag_T(FALSE);
     }
 
 
+    @Override
     public void visit(LegacyInstr.CLV i)
     { // clear V flag
         state.setFlag_V(FALSE);
     }
 
 
+    @Override
     public void visit(LegacyInstr.CLZ i)
     { // clear Z flag
         state.setFlag_Z(FALSE);
     }
 
 
+    @Override
     public void visit(LegacyInstr.COM i)
     { // one's compliment register
         char r1 = state.getRegisterAV(i.r1);
@@ -473,6 +519,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.CP i)
     { // compare registers
         char r1 = state.getRegisterAV(i.r1);
@@ -482,6 +529,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.CPC i)
     { // compare registers with carry
         char r1 = state.getRegisterAV(i.r1);
@@ -491,6 +539,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.CPI i)
     { // compare register with immediate
         char r1 = state.getRegisterAV(i.r1);
@@ -500,6 +549,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.CPSE i)
     { // compare registers and skip if equal
         char r1 = state.getRegisterAV(i.r1);
@@ -509,6 +559,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.DEC i)
     { // decrement register by one
         char r1 = state.getRegisterAV(i.r1);
@@ -524,6 +575,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.EICALL i)
     { // extended indirect call
         char rl = state.getRegisterAV(LegacyRegister.Z);
@@ -533,6 +585,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.EIJMP i)
     { // extended indirect jump
         char rl = state.getRegisterAV(LegacyRegister.Z);
@@ -542,18 +595,21 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.ELPM i)
     { // extended load program memory to r0
         state.setRegisterAV(LegacyRegister.R0, UNKNOWN);
     }
 
 
+    @Override
     public void visit(LegacyInstr.ELPMD i)
     { // extended load program memory to register
         state.setRegisterAV(i.r1, UNKNOWN);
     }
 
 
+    @Override
     public void visit(LegacyInstr.ELPMPI i)
     { // extended load program memory to register and post-increment
         state.setRegisterAV(i.r1, UNKNOWN);
@@ -561,6 +617,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.EOR i)
     { // exclusive or register with register
         char result;
@@ -585,6 +642,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.FMUL i)
     { // fractional multiply register with register to r0
         char r1 = state.getRegisterAV(i.r1);
@@ -595,6 +653,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.FMULS i)
     { // signed fractional multiply register with register to r0
         char r1 = state.getRegisterAV(i.r1);
@@ -604,6 +663,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.FMULSU i)
     { // signed/unsigned fractional multiply register with register to r0
         char r1 = state.getRegisterAV(i.r1);
@@ -629,6 +689,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.ICALL i)
     { // indirect call through Z register
         char rl = state.getRegisterAV(LegacyRegister.Z);
@@ -637,6 +698,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.IJMP i)
     { // indirect jump through Z register
         char rl = state.getRegisterAV(LegacyRegister.Z);
@@ -645,6 +707,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.IN i)
     { // read from IO register into register
         char val = state.getIORegisterAV(i.imm1);
@@ -652,6 +715,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.INC i)
     { // increment register by one
         char r1 = state.getRegisterAV(i.r1);
@@ -667,6 +731,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.JMP i)
     { // absolute jump
         state.setPC(absolute(i.imm1));
@@ -675,24 +740,28 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.LD i)
     { // load from SRAM
         state.setRegisterAV(i.r1, UNKNOWN);
     }
 
 
+    @Override
     public void visit(LegacyInstr.LDD i)
     { // load from SRAM with displacement
         state.setRegisterAV(i.r1, UNKNOWN);
     }
 
 
+    @Override
     public void visit(LegacyInstr.LDI i)
     { // load immediate into register
         state.setRegisterAV(i.r1, knownVal((byte) i.imm1));
     }
 
 
+    @Override
     public void visit(LegacyInstr.LDPD i)
     { // load from SRAM with pre-decrement
         state.setRegisterAV(i.r1, UNKNOWN);
@@ -700,6 +769,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.LDPI i)
     { // load from SRAM with post-increment
         state.setRegisterAV(i.r1, UNKNOWN);
@@ -707,24 +777,28 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.LDS i)
     { // load direct from SRAM
         state.setRegisterAV(i.r1, UNKNOWN);
     }
 
 
+    @Override
     public void visit(LegacyInstr.LPM i)
     { // load program memory into r0
         state.setRegisterAV(LegacyRegister.R0, UNKNOWN);
     }
 
 
+    @Override
     public void visit(LegacyInstr.LPMD i)
     { // load program memory into register
         state.setRegisterAV(i.r1, UNKNOWN);
     }
 
 
+    @Override
     public void visit(LegacyInstr.LPMPI i)
     { // load program memory into register and post-increment
         state.setRegisterAV(i.r1, UNKNOWN);
@@ -732,6 +806,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.LSL i)
     { // logical shift left
         char val = state.getRegisterAV(i.r1);
@@ -740,6 +815,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.LSR i)
     { // logical shift right
         char val = state.getRegisterAV(i.r1);
@@ -748,6 +824,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.MOV i)
     { // copy register to register
         char result = state.getRegisterAV(i.r2);
@@ -755,6 +832,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.MOVW i)
     { // copy two registers to two registers
         char vall = state.getRegisterAV(i.r2);
@@ -765,6 +843,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.MUL i)
     { // multiply register with register to r0
         char r1 = state.getRegisterAV(i.r1);
@@ -774,6 +853,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.MULS i)
     { // signed multiply register with register to r0
         char r1 = state.getRegisterAV(i.r1);
@@ -783,6 +863,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.MULSU i)
     { // signed/unsigned multiply register with register to r0
         char r1 = state.getRegisterAV(i.r1);
@@ -802,6 +883,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.NEG i)
     { // two's complement register
         char r1 = state.getRegisterAV(i.r1);
@@ -810,12 +892,14 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.NOP i)
     { // do nothing operation
       // do nothing.
     }
 
 
+    @Override
     public void visit(LegacyInstr.OR i)
     { // or register with register
         char r1 = state.getRegisterAV(i.r1);
@@ -825,6 +909,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.ORI i)
     { // or register with immediate
         char r1 = state.getRegisterAV(i.r1);
@@ -834,6 +919,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.OUT i)
     { // write from register to IO register
         char val = state.getRegisterAV(i.r1);
@@ -841,6 +927,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.POP i)
     { // pop from the stack to register
         char val = policy.pop(state);
@@ -848,6 +935,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.PUSH i)
     { // push register to the stack
         char val = state.getRegisterAV(i.r1);
@@ -855,24 +943,28 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.RCALL i)
     { // relative call
         state = policy.call(state, relative(i.imm1));
     }
 
 
+    @Override
     public void visit(LegacyInstr.RET i)
     { // return to caller
         state = policy.ret(state);
     }
 
 
+    @Override
     public void visit(LegacyInstr.RETI i)
     { // return from interrupt
         state = policy.reti(state);
     }
 
 
+    @Override
     public void visit(LegacyInstr.RJMP i)
     { // relative jump
         state.setPC(relative(i.imm1));
@@ -881,6 +973,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.ROL i)
     { // rotate left through carry flag
         char val = state.getRegisterAV(i.r1);
@@ -889,6 +982,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.ROR i)
     { // rotate right through carry flag
         char val = state.getRegisterAV(i.r1);
@@ -897,6 +991,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.SBC i)
     { // subtract register from register with carry
         char r1 = state.getRegisterAV(i.r1);
@@ -906,6 +1001,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.SBCI i)
     { // subtract immediate from register with carry
         char r1 = state.getRegisterAV(i.r1);
@@ -915,6 +1011,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.SBI i)
     { // set bit in IO register
         char val = state.getIORegisterAV(i.imm1);
@@ -923,6 +1020,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.SBIC i)
     { // skip if bit in IO register is clear
         char reg = state.getIORegisterAV(i.imm1);
@@ -931,6 +1029,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.SBIS i)
     { // skip if bit in IO register is set
         char reg = state.getIORegisterAV(i.imm1);
@@ -939,6 +1038,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.SBIW i)
     { // subtract immediate from word
         char rh = state.getRegisterAV(i.r1.nextRegister());
@@ -963,6 +1063,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.SBR i)
     { // set bits in register
         char r1 = state.getRegisterAV(i.r1);
@@ -972,6 +1073,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.SBRC i)
     { // skip if bit in register cleared
         char bit = getBit(state.getRegisterAV(i.r1), i.imm1);
@@ -979,6 +1081,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.SBRS i)
     { // skip if bit in register set
         char bit = getBit(state.getRegisterAV(i.r1), i.imm1);
@@ -986,83 +1089,97 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.SEC i)
     { // set C (carry) flag
         state.setFlag_C(TRUE);
     }
 
 
+    @Override
     public void visit(LegacyInstr.SEH i)
     { // set H (half carry) flag
         state.setFlag_H(TRUE);
     }
 
 
+    @Override
     public void visit(LegacyInstr.SEI i)
     { // set I (interrupt enable) flag
         state.setFlag_I(TRUE);
     }
 
 
+    @Override
     public void visit(LegacyInstr.SEN i)
     { // set N (negative) flag
         state.setFlag_N(TRUE);
     }
 
 
+    @Override
     public void visit(LegacyInstr.SER i)
     { // set bits in register
         state.setRegisterAV(i.r1, knownVal((byte) 0xff));
     }
 
 
+    @Override
     public void visit(LegacyInstr.SES i)
     { // set S (signed) flag
         state.setFlag_S(TRUE);
     }
 
 
+    @Override
     public void visit(LegacyInstr.SET i)
     { // set T flag
         state.setFlag_T(TRUE);
     }
 
 
+    @Override
     public void visit(LegacyInstr.SEV i)
     { // set V (overflow) flag
         state.setFlag_V(TRUE);
     }
 
 
+    @Override
     public void visit(LegacyInstr.SEZ i)
     { // set Z (zero) flag
         state.setFlag_Z(TRUE);
     }
 
 
+    @Override
     public void visit(LegacyInstr.SLEEP i)
     { // invoke sleep mode
     }
 
 
+    @Override
     public void visit(LegacyInstr.SPM i)
     { // store to program memory from r0
       // do nothing, ignore this instruction
     }
 
 
+    @Override
     public void visit(LegacyInstr.ST i)
     { // store from register to SRAM
       // we do not model memory now.
     }
 
 
+    @Override
     public void visit(LegacyInstr.STD i)
     { // store from register to SRAM with displacement
       // we do not model memory now.
     }
 
 
+    @Override
     public void visit(LegacyInstr.STPD i)
     { // store from register to SRAM with pre-decrement
         addImmediateToRegister(i.r1, -1);
@@ -1070,6 +1187,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.STPI i)
     { // store from register to SRAM with post-increment
         addImmediateToRegister(i.r1, 1);
@@ -1077,12 +1195,14 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.STS i)
     { // store direct to SRAM
       // we do not model memory now.
     }
 
 
+    @Override
     public void visit(LegacyInstr.SUB i)
     { // subtract register from register
         char r1 = state.getRegisterAV(i.r1);
@@ -1092,6 +1212,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.SUBI i)
     { // subtract immediate from register
         char r1 = state.getRegisterAV(i.r1);
@@ -1101,6 +1222,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.SWAP i)
     { // swap nibbles in register
         char result = state.getRegisterAV(i.r1);
@@ -1111,6 +1233,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.TST i)
     { // test for zero or minus
         char r1 = state.getRegisterAV(i.r1);
@@ -1121,6 +1244,7 @@ public class AbstractInterpreter extends AbstractArithmetic
     }
 
 
+    @Override
     public void visit(LegacyInstr.WDR i)
     { // watchdog timer reset
       // do nothing.

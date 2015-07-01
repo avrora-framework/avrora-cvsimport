@@ -33,8 +33,11 @@
 package avrora.avrora.sim.mcu;
 
 import avrora.avrora.arch.avr.AVRProperties;
-import avrora.avrora.sim.*;
 import avrora.avrora.sim.ActiveRegister;
+import avrora.avrora.sim.AtmelInterpreter;
+import avrora.avrora.sim.FiniteStateMachine;
+import avrora.avrora.sim.InterruptTable;
+import avrora.avrora.sim.RWRegister;
 import avrora.avrora.sim.clock.ClockDomain;
 import avrora.cck.util.Arithmetic;
 
@@ -87,6 +90,7 @@ public abstract class ATMegaFamilyNew extends AtmelMicrocontroller
         }
 
 
+        @Override
         public void force(int inum)
         {
             val = true;
@@ -94,6 +98,7 @@ public abstract class ATMegaFamilyNew extends AtmelMicrocontroller
         }
 
 
+        @Override
         public void invoke(int inum)
         {
             if (autoclear)
@@ -119,12 +124,14 @@ public abstract class ATMegaFamilyNew extends AtmelMicrocontroller
             }
 
 
+            @Override
             public void force(int inum)
             {
                 value = Arithmetic.setBit(value, bit, true);
             }
 
 
+            @Override
             public void invoke(int inum)
             {
                 value = Arithmetic.setBit(value, bit, false);
@@ -155,6 +162,7 @@ public abstract class ATMegaFamilyNew extends AtmelMicrocontroller
         }
 
 
+        @Override
         public void write(byte val)
         {
             value = (byte) (value & ~val);
@@ -209,6 +217,7 @@ public abstract class ATMegaFamilyNew extends AtmelMicrocontroller
         }
 
 
+        @Override
         public void write(byte val)
         {
             value = val;
@@ -244,6 +253,7 @@ public abstract class ATMegaFamilyNew extends AtmelMicrocontroller
         }
 
 
+        @Override
         public void write(byte val)
         {
             for (int bit = 0; bit < pins.length; bit++)
@@ -270,6 +280,7 @@ public abstract class ATMegaFamilyNew extends AtmelMicrocontroller
         }
 
 
+        @Override
         public void write(byte val)
         {
             for (int bit = 0; bit < pins.length; bit++)
@@ -296,6 +307,7 @@ public abstract class ATMegaFamilyNew extends AtmelMicrocontroller
         }
 
 
+        @Override
         public byte read()
         {
             byte value = 0;
@@ -311,6 +323,7 @@ public abstract class ATMegaFamilyNew extends AtmelMicrocontroller
         }
 
 
+        @Override
         public void write(byte val)
         {
             // ignore writes.

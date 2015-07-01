@@ -32,13 +32,13 @@
 
 package avrora.avrora.monitors;
 
+import avrora.avrora.core.SourceMapping;
 import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.util.MemPrint;
-import avrora.avrora.core.SourceMapping;
+import avrora.cck.text.Printer;
+import avrora.cck.text.Verbose;
 import avrora.cck.util.Option;
 import avrora.cck.util.Util;
-import avrora.cck.text.Verbose;
-import avrora.cck.text.Printer;
 
 /**
  * The <code>PrintMonitor</code> gives apps a simple way to tell the simulator
@@ -120,6 +120,7 @@ public class PrintMonitor extends MonitorFactory
         }
 
 
+        @Override
         public void report()
         {
             // do nothing.
@@ -135,6 +136,7 @@ public class PrintMonitor extends MonitorFactory
     }
 
 
+    @Override
     public avrora.avrora.monitors.Monitor newMonitor(Simulator s)
     {
         return new Monitor(s);

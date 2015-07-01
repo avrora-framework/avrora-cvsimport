@@ -32,10 +32,11 @@
 
 package avrora.avrora.syntax.objdump;
 
-import avrora.avrora.actions.Action;
-import avrora.cck.util.Option;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+
+import avrora.avrora.actions.Action;
+import avrora.cck.util.Option;
 
 /**
  * The <code>ObjDumpPreprocessor</code> class is a utility class that takes the
@@ -73,6 +74,7 @@ public class ODPPAction extends Action
     }
 
 
+    @Override
     public void run(String[] args) throws Exception
     {
         ObjDumpReformatter rf = new ObjDumpReformatter(SECTIONS.get());

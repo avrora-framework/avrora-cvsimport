@@ -32,8 +32,9 @@
 
 package avrora.avrora.gui;
 
+import javax.swing.JPanel;
+
 import avrora.avrora.monitors.Monitor;
-import javax.swing.*;
 
 /**
  * The <code>VisualMonitor</code> class represents a monitor attached to a
@@ -88,5 +89,6 @@ public interface VisualMonitor extends Monitor
      * For visual monitors, typically is would do a "last check" to make sure it
      * got all it's data from temporary storage onto the display.
      */
+    @Override
     public void report();
 }

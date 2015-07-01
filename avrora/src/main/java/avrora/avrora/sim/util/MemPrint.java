@@ -32,11 +32,14 @@
 
 package avrora.avrora.sim.util;
 
-import avrora.avrora.sim.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+
+import avrora.avrora.sim.AtmelInterpreter;
+import avrora.avrora.sim.Simulator;
+import avrora.avrora.sim.State;
 import avrora.cck.text.StringUtil;
 import avrora.cck.text.Terminal;
-
-import java.io.*;
 
 /**
  * <code>MemPrint</code> is a simple utility that allows the simulated program
@@ -63,7 +66,9 @@ public class MemPrint extends Simulator.Watch.Empty
         {
             try
             {
-                new FileWriter(log);
+               FileWriter foo = new FileWriter(log);
+               // TODO: foo.close(() is a hoftix
+               foo.close();
             }
             catch (Exception e)
             {// Catch exception if any
@@ -81,6 +86,7 @@ public class MemPrint extends Simulator.Watch.Empty
     }
 
 
+    @Override
     public void fireBeforeWrite(State state, int data_addr, byte value)
     {
         if (data_addr != base)
@@ -178,7 +184,7 @@ public class MemPrint extends Simulator.Watch.Empty
 
         synchronized (Terminal.class)
         {
-            if (!ret & fil.length() != 0)
+            if (!ret && fil.length() != 0)
                 Terminal.println(buf.toString());// print in screen if not
                                                  // return line and something to
                                                  // print

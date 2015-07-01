@@ -35,15 +35,18 @@
 
 package avrora.avrora.monitors;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
 import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.mcu.AtmelMicrocontroller;
 import avrora.avrora.sim.mcu.USART;
 import avrora.avrora.sim.platform.SerialForwarder;
 import avrora.avrora.sim.platform.SerialLogger;
-import avrora.cck.util.*;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.HashSet;
+import avrora.cck.util.Option;
+import avrora.cck.util.Options;
+import avrora.cck.util.Util;
 
 /**
  * The <code>SerialMonitor</code> class is a monitor that that is capable of
@@ -103,6 +106,7 @@ public class SerialMonitor extends MonitorFactory
         int port;
 
 
+        @Override
         void connect(USART usart)
         {
             sf = new SerialForwarder(usart, port, simulator,
@@ -116,6 +120,7 @@ public class SerialMonitor extends MonitorFactory
         String outfile;
 
 
+        @Override
         void connect(USART usart)
         {
             new SerialForwarder(usart, infile, outfile);
@@ -124,9 +129,9 @@ public class SerialMonitor extends MonitorFactory
 
     class CommandConnection extends Connection
     {
-        String[] command;
+        String[] command = {};
 
-
+        @Override
         void connect(USART usart)
         {
             new SerialForwarder(usart, command);
@@ -135,6 +140,7 @@ public class SerialMonitor extends MonitorFactory
 
     class TerminalConnection extends Connection
     {
+        @Override
         void connect(USART usart)
         {
             new SerialLogger(usart, simulator);
@@ -174,6 +180,7 @@ public class SerialMonitor extends MonitorFactory
         }
 
 
+        @Override
         public void report()
         {
             // no report, but stop the SocketConnections...
@@ -204,6 +211,7 @@ public class SerialMonitor extends MonitorFactory
     }
 
 
+    @Override
     public void processOptions(Options o)
     {
         super.processOptions(o);
@@ -290,6 +298,7 @@ public class SerialMonitor extends MonitorFactory
      * @return an instance of the <code>Monitor</code> interface for the
      *         specified simulator
      */
+    @Override
     public avrora.avrora.monitors.Monitor newMonitor(Simulator s)
     {
         return new Monitor(s);

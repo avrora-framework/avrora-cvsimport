@@ -34,12 +34,23 @@
 
 package avrora.jintgen.isdl.verifier;
 
-import avrora.cck.util.Util;
-import avrora.cck.text.StringUtil;
-import avrora.jintgen.isdl.*;
-import avrora.jintgen.jigir.*;
 import java.util.HashMap;
 import java.util.List;
+
+import avrora.cck.text.StringUtil;
+import avrora.cck.util.Util;
+import avrora.jintgen.isdl.AddrModeDecl;
+import avrora.jintgen.isdl.ArchDecl;
+import avrora.jintgen.isdl.FormatDecl;
+import avrora.jintgen.isdl.InstrDecl;
+import avrora.jintgen.isdl.OperandTypeDecl;
+import avrora.jintgen.jigir.CodeVisitor;
+import avrora.jintgen.jigir.DotExpr;
+import avrora.jintgen.jigir.Expr;
+import avrora.jintgen.jigir.FixedRangeExpr;
+import avrora.jintgen.jigir.IndexExpr;
+import avrora.jintgen.jigir.Literal;
+import avrora.jintgen.jigir.VarExpr;
 
 /**
  * @author Ben L. Titzer
@@ -53,6 +64,7 @@ public class EncodingVerifier extends VerifierPass
     }
 
 
+    @Override
     public void verify()
     {
         uniqueCheck("Format", "Encoding format", arch.formats);
@@ -170,7 +182,10 @@ public class EncodingVerifier extends VerifierPass
         {
             OperandTypeDecl ot = op.getOperandType();
             if (ot == null)
+            {
                 ERROR.UnresolvedOperandType(op.typeRef.getToken());
+                throw new IllegalStateException("unresolved opersnd");
+            }
             if (ot.isCompound())
             {
                 OperandTypeDecl.Compound cd = (OperandTypeDecl.Compound) ot;
@@ -187,6 +202,7 @@ public class EncodingVerifier extends VerifierPass
         }
 
 
+        @Override
         public void visit(FixedRangeExpr e)
         {
             int diff = (e.high_bit - e.low_bit);
@@ -196,6 +212,7 @@ public class EncodingVerifier extends VerifierPass
         }
 
 
+        @Override
         public void visit(IndexExpr e)
         {
             // TODO: this is not necessarily true for a map index expr
@@ -203,6 +220,7 @@ public class EncodingVerifier extends VerifierPass
         }
 
 
+        @Override
         public void visit(Literal.IntExpr e)
         {
             if (isBinary(e))
@@ -228,12 +246,14 @@ public class EncodingVerifier extends VerifierPass
         }
 
 
+        @Override
         public void visit(Literal.BoolExpr e)
         {
             width = 1;
         }
 
 
+        @Override
         public void visit(VarExpr e)
         {
             Expr se = substMap.get(e.variable.image);
@@ -252,6 +272,7 @@ public class EncodingVerifier extends VerifierPass
         }
 
 
+        @Override
         public void visit(DotExpr e)
         {
             String str = e.expr + "." + e.field;
@@ -264,6 +285,7 @@ public class EncodingVerifier extends VerifierPass
         }
 
 
+        @Override
         public void error(Expr e)
         {
             ERROR.CannotComputeSizeOfExpression(e);

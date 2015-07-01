@@ -42,7 +42,7 @@ import avrora.cck.text.Terminal;
 public class GUIAction extends Action
 {
 
-    public AvroraGui app; // allows us to access GUI
+    public AvroraGui app = AvroraGui.instance; // allows us to access GUI
 
     public static final String HELP = "The \"gui\" action launches a GUI allowing the user to interactively "
             + "create simulations, complete with graphical monitors.";
@@ -59,11 +59,11 @@ public class GUIAction extends Action
      * GUI. If a file was specified by the command line, it will be passed to
      * the GUI as part of the arguments.
      */
+    @Override
     public void run(String[] args) throws Exception
     {
 
-        // Let's turn off colors
-        Terminal.useColors = false;
+        disableColors();
 
         // Provide nothing to the array if it's empty
         if (args.length < 1)
@@ -77,6 +77,13 @@ public class GUIAction extends Action
         // thread thing
         AvroraGui.init(options, args);
         AvroraGui.instance.showGui();
+    }
+
+
+    private void disableColors()
+    {
+        // Let's turn off colors
+        Terminal.useColors = false;
     }
 
 

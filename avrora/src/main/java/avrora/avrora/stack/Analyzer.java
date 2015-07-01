@@ -32,16 +32,25 @@
 
 package avrora.avrora.stack;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
 import avrora.avrora.arch.legacy.LegacyInstr;
 import avrora.avrora.arch.legacy.LegacyRegister;
 import avrora.avrora.core.Program;
 import avrora.avrora.stack.StateCache.State;
-import avrora.avrora.stack.isea.*;
+import avrora.avrora.stack.isea.ISEAnalyzer;
+import avrora.avrora.stack.isea.ISEState;
+import avrora.avrora.stack.isea.ISEValue;
 import avrora.cck.stat.Distribution;
-import avrora.cck.text.*;
-import avrora.cck.util.Util;
+import avrora.cck.text.Printer;
+import avrora.cck.text.StringUtil;
+import avrora.cck.text.TermUtil;
+import avrora.cck.text.Terminal;
+import avrora.cck.text.Verbose;
 import avrora.cck.util.TimeUtil;
-import java.util.*;
+import avrora.cck.util.Util;
 
 /**
  * The <code>Analyzer</code> class implements the analysis phase that determines
@@ -117,6 +126,12 @@ public class Analyzer
     }
 
 
+    private void setRunning(boolean isRunning)
+    {
+        Analyzer.running = isRunning;
+    }
+
+
     /**
      * The <code>run()</code> method begins the analysis. The entrypoint of the
      * program with an initial default state serves as the first state to start
@@ -124,7 +139,7 @@ public class Analyzer
      */
     public void run()
     {
-        running = true;
+        setRunning(true);
         MonitorThread t = null;
         if (MONITOR_STATES)
         {
@@ -181,7 +196,7 @@ public class Analyzer
                 "Number of sets", "Aggregate size", "Distribution of Set Size");
         while (i.hasNext())
         {
-            StateCache.State state = (StateCache.State) i.next();
+            StateCache.State state = i.next();
             StateCache.Set stateSet = state.info.stateSet;
             int size = stateSet == null ? 0 : stateSet.size();
             sizeDist.record(size);
@@ -199,7 +214,7 @@ public class Analyzer
                 "Number of unique instructions", null, "Distribution");
         while (i.hasNext())
         {
-            StateCache.State s = (StateCache.State) i.next();
+            StateCache.State s = i.next();
             pcDist.record(s.getPC());
 
         }
@@ -221,15 +236,16 @@ public class Analyzer
          * running. Every five seconds it reports the number of states, edges,
          * frontier states, propagations, etc.
          */
+        @Override
         public void run()
         {
             int cntr = 0;
             try
             {
-                while (running)
+                while (Analyzer.running)
                 {
                     sleep(5000);
-                    if (!running)
+                    if (!Analyzer.running)
                         break;
                     if (cntr % 10 == 0)
                     {
@@ -623,7 +639,7 @@ public class Analyzer
             {
                 // cycle detected. check that the depth when reentering is the
                 // same
-                int prevdepth = ((Integer) stack.get(t)).intValue();
+                int prevdepth = stack.get(t);
                 if (depth + edge.weight != prevdepth)
                 {
                     stack.remove(s);
@@ -839,6 +855,7 @@ public class Analyzer
          *         the policy, and the abstract interpreter should not be
          *         concerned.
          */
+        @Override
         public MutableState call(MutableState s, int target_address)
         {
             if (isea != null)
@@ -869,6 +886,7 @@ public class Analyzer
          * @return the state of the program after the interrupt, null if there
          *         is no next state
          */
+        @Override
         public MutableState interrupt(MutableState s, int num)
         {
             s.setFlag_I(AbstractArithmetic.FALSE);
@@ -895,6 +913,7 @@ public class Analyzer
          *         the policy, and the abstract interpreter should not be
          *         concerned.
          */
+        @Override
         public MutableState ret(MutableState s)
         {
             frontierState.setType(RET_STATE);
@@ -918,6 +937,7 @@ public class Analyzer
          *         the policy, and the abstract interpreter should not be
          *         concerned.
          */
+        @Override
         public MutableState reti(MutableState s)
         {
             frontierState.setType(RETI_STATE);
@@ -948,6 +968,7 @@ public class Analyzer
          *         the policy, and the abstract interpreter should not be
          *         concerned.
          */
+        @Override
         public MutableState indirectCall(MutableState s, char addr_low,
                 char addr_hi)
         {
@@ -983,6 +1004,7 @@ public class Analyzer
          *         the policy, and the abstract interpreter should not be
          *         concerned.
          */
+        @Override
         public MutableState indirectJump(MutableState s, char addr_low,
                 char addr_hi)
         {
@@ -1021,6 +1043,7 @@ public class Analyzer
          *         the policy, and the abstract interpreter should not be
          *         concerned.
          */
+        @Override
         public MutableState indirectCall(MutableState s, char addr_low,
                 char addr_hi, char ext)
         {
@@ -1047,6 +1070,7 @@ public class Analyzer
          *         the policy, and the abstract interpreter should not be
          *         concerned.
          */
+        @Override
         public MutableState indirectJump(MutableState s, char addr_low,
                 char addr_hi, char ext)
         {
@@ -1065,6 +1089,7 @@ public class Analyzer
          * @param val
          *            the abstract value to push onto the stack
          */
+        @Override
         public void push(MutableState s, char val)
         {
             edgeType = PUSH_EDGE;
@@ -1081,6 +1106,7 @@ public class Analyzer
          *            the current abstract state
          * @return the abstract value popped from the stack
          */
+        @Override
         public char pop(MutableState s)
         {
             edgeType = POP_EDGE;
@@ -1098,6 +1124,7 @@ public class Analyzer
          * @param newState
          *            the new state created
          */
+        @Override
         public void pushState(MutableState newState)
         {
             addEdge(frontierState, edgeType, newState);

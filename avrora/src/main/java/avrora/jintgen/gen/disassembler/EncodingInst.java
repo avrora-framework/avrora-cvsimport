@@ -32,15 +32,18 @@
 
 package avrora.jintgen.gen.disassembler;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import avrora.cck.text.Printer;
 import avrora.cck.text.Verbose;
 import avrora.cck.util.Arithmetic;
 import avrora.jintgen.gen.ConstantPropagator;
-import avrora.jintgen.isdl.*;
+import avrora.jintgen.isdl.AddrModeDecl;
+import avrora.jintgen.isdl.FormatDecl;
+import avrora.jintgen.isdl.InstrDecl;
 import avrora.jintgen.jigir.Expr;
 import avrora.jintgen.jigir.Literal;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @author Ben L. Titzer
@@ -106,6 +109,7 @@ public class EncodingInst
     }
 
 
+    @Override
     public String toString()
     {
         return instr.name + " x " + addrMode.name;

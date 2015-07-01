@@ -31,9 +31,12 @@
  */
 package avrora.avrora.monitors;
 
-import avrora.avrora.core.*;
+import avrora.avrora.core.Program;
+import avrora.avrora.core.SourceMapping;
 import avrora.avrora.sim.Simulator;
-import avrora.cck.text.*;
+import avrora.cck.text.StringUtil;
+import avrora.cck.text.TermUtil;
+import avrora.cck.text.Terminal;
 import avrora.cck.util.Option;
 import avrora.cck.util.Util;
 
@@ -100,6 +103,7 @@ public class CallTimeMonitor extends MonitorFactory
         }
 
 
+        @Override
         public void fireAfterReturn(long time, int pc, int retaddr)
         {
             if (getTarget(depth - 1) == start.lma_addr)
@@ -112,6 +116,7 @@ public class CallTimeMonitor extends MonitorFactory
         }
 
 
+        @Override
         public void fireAfterInterruptReturn(long time, int pc, int retaddr)
         {
             if (ignore_interrupts && findCallAddress(start.lma_addr))
@@ -122,6 +127,7 @@ public class CallTimeMonitor extends MonitorFactory
         }
 
 
+        @Override
         public void fireBeforeCall(long time, int pc, int target)
         {
             if (target == start.lma_addr)
@@ -130,6 +136,7 @@ public class CallTimeMonitor extends MonitorFactory
         }
 
 
+        @Override
         public void fireBeforeInterrupt(long time, int pc, int inum)
         {
             if (ignore_interrupts && findCallAddress(start.lma_addr))
@@ -165,14 +172,17 @@ public class CallTimeMonitor extends MonitorFactory
         {
             SourceMapping lm = program.getSourceMapping();
             SourceMapping.Location loc = lm.getLocation(src);
-            if (loc == null)
+            if (loc == null) {
                 Util.userError("Invalid program address: ", src);
+                throw new IllegalStateException("invalid program address");
+            }
             if (program.readInstr(loc.lma_addr) == null)
                 Util.userError("Invalid program address: ", src);
             return loc;
         }
 
 
+        @Override
         public void report()
         {
             TermUtil.printSeparator(
@@ -196,6 +206,7 @@ public class CallTimeMonitor extends MonitorFactory
     }
 
 
+    @Override
     public Monitor newMonitor(Simulator s)
     {
         return new CallTimeMon(s);

@@ -35,12 +35,15 @@
 
 package avrora.avrora.monitors;
 
+import java.util.HashMap;
+
 import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.mcu.AtmelMicrocontroller;
 import avrora.avrora.sim.mcu.SPI;
 import avrora.avrora.sim.platform.SPIForwarder;
-import avrora.cck.util.*;
-import java.util.HashMap;
+import avrora.cck.util.Option;
+import avrora.cck.util.Options;
+import avrora.cck.util.Util;
 
 /**
  * The <code>SerialMonitor</code> class is a monitor that that is capable of
@@ -79,6 +82,7 @@ public class SPIMonitor extends MonitorFactory
         int port;
 
 
+        @Override
         void connect(SPI spi)
         {
             new SPIForwarder(spi, port, (int) BPS.get(), MASTER.get());
@@ -101,7 +105,7 @@ public class SPIMonitor extends MonitorFactory
          */
         Monitor(Simulator s)
         {
-            Connection conn = (Connection) portMap.get(new Integer(s.getID()));
+            Connection conn = portMap.get(new Integer(s.getID()));
             if (conn != null)
             {
                 AtmelMicrocontroller mcu = (AtmelMicrocontroller) s
@@ -112,6 +116,7 @@ public class SPIMonitor extends MonitorFactory
         }
 
 
+        @Override
         public void report()
         {
             // no report
@@ -135,6 +140,7 @@ public class SPIMonitor extends MonitorFactory
     }
 
 
+    @Override
     public void processOptions(Options o)
     {
         super.processOptions(o);
@@ -169,6 +175,7 @@ public class SPIMonitor extends MonitorFactory
      * @return an instance of the <code>Monitor</code> interface for the
      *         specified simulator
      */
+    @Override
     public avrora.avrora.monitors.Monitor newMonitor(Simulator s)
     {
         return new Monitor(s);

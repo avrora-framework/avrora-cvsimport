@@ -32,8 +32,9 @@
 
 package avrora.jintgen.jigir;
 
-import avrora.cck.text.StringUtil;
 import java.util.List;
+
+import avrora.cck.text.StringUtil;
 
 /**
  * The <code>IfStmt</code> class represents a simple branch within the IR. Since
@@ -92,6 +93,7 @@ public class IfStmt extends Stmt
      * @param v
      *            the visitor to accept
      */
+    @Override
     public void accept(StmtVisitor v)
     {
         v.visit(this);
@@ -104,6 +106,7 @@ public class IfStmt extends Stmt
      *
      * @return a string representation of this statement
      */
+    @Override
     public String toString()
     {
         StringBuffer buf = new StringBuffer();
@@ -129,6 +132,7 @@ public class IfStmt extends Stmt
      * @return the result of calling the appropriate <code>visit()</code> of the
      *         rebuilder passed
      */
+    @Override
     public <Res, Env> Res accept(StmtAccumulator<Res, Env> r, Env env)
     {
         return r.visit(this, env);

@@ -31,11 +31,15 @@
  */
 package avrora.avrora.monitors;
 
-import avrora.avrora.core.*;
+import avrora.avrora.core.Program;
+import avrora.avrora.core.SourceMapping;
 import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.State;
 import avrora.cck.stat.Distribution;
-import avrora.cck.text.*;
+import avrora.cck.text.Printer;
+import avrora.cck.text.StringUtil;
+import avrora.cck.text.TermUtil;
+import avrora.cck.text.Terminal;
 import avrora.cck.util.Option;
 import avrora.cck.util.Util;
 
@@ -198,7 +202,10 @@ public class TripTimeMonitor extends MonitorFactory
             SourceMapping lm = program.getSourceMapping();
             SourceMapping.Location loc = lm.getLocation(src);
             if (loc == null)
+            {
                 Util.userError("Invalid program address: ", src);
+                throw new IllegalStateException("invalid program address");
+            }
             if (program.readInstr(loc.lma_addr) == null)
                 Util.userError("Invalid program address: ", src);
             return loc;
@@ -257,6 +264,7 @@ public class TripTimeMonitor extends MonitorFactory
 
         protected class PTPProbe extends Simulator.Probe.Empty
         {
+            @Override
             public void fireBefore(State state, int pc)
             {
                 long time = state.getCycles();
@@ -273,6 +281,7 @@ public class TripTimeMonitor extends MonitorFactory
         }
 
 
+        @Override
         public void report()
         {
             TermUtil.printSeparator(
@@ -292,6 +301,7 @@ public class TripTimeMonitor extends MonitorFactory
     }
 
 
+    @Override
     public Monitor newMonitor(Simulator s)
     {
         return new PointToPointMon(s);

@@ -32,13 +32,19 @@
 
 package avrora.avrora.sim.platform;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.RandomAccessFile;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.clock.Clock;
 import avrora.avrora.sim.mcu.USART;
 import avrora.cck.util.Util;
-import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 /**
  * The <code>SerialForwarder</code> class implements a serial forwarder that
@@ -63,6 +69,8 @@ public class SerialForwarder implements USART.USARTDevice
     private byte[] data;
     protected int portNumber;
     private final Simulator simulator;
+
+    private RandomAccessFile handle;
 
 
     /**
@@ -112,6 +120,7 @@ public class SerialForwarder implements USART.USARTDevice
         }
 
         new Thread(new Runnable() {
+            @Override
             public void run()
             {
                 try
@@ -219,7 +228,7 @@ public class SerialForwarder implements USART.USARTDevice
                 out = new FileOutputStream(outfile);
             } else
             {
-                RandomAccessFile handle = new RandomAccessFile(infile, "rw");
+                handle = new RandomAccessFile(infile, "rw");
                 in = new FileInputStream(handle.getFD());
                 out = new FileOutputStream(handle.getFD());
             }
@@ -267,6 +276,7 @@ public class SerialForwarder implements USART.USARTDevice
     }
 
 
+    @Override
     public USART.Frame transmitFrame()
     {
         if (in != null)
@@ -286,6 +296,7 @@ public class SerialForwarder implements USART.USARTDevice
     }
 
 
+    @Override
     public void receiveFrame(USART.Frame frame)
     {
         try
@@ -304,6 +315,7 @@ public class SerialForwarder implements USART.USARTDevice
     public void stop()
     {
         if (serverSocket != null)
+        {
             try
             {
                 closeSocketInOut();
@@ -313,6 +325,17 @@ public class SerialForwarder implements USART.USARTDevice
             {
                 throw Util.unexpected(e);
             }
+        }
+        if (null != handle)
+        {
+            try
+            {
+                handle.close();
+            }
+            catch (IOException e)
+            {
+            }
+        }
     }
 
     private class SFTicker implements Simulator.Event
@@ -329,6 +352,7 @@ public class SerialForwarder implements USART.USARTDevice
         }
 
 
+        @Override
         public void fire()
         {
             checkReconnection();

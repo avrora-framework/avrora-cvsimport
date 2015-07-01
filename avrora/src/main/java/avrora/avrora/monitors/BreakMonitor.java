@@ -33,7 +33,9 @@
 package avrora.avrora.monitors;
 
 import avrora.avrora.arch.AbstractInstr;
-import avrora.avrora.arch.legacy.*;
+import avrora.avrora.arch.legacy.LegacyInstr;
+import avrora.avrora.arch.legacy.LegacyRegister;
+import avrora.avrora.arch.legacy.LegacyState;
 import avrora.avrora.core.Program;
 import avrora.avrora.core.SourceMapping;
 import avrora.avrora.sim.Simulator;
@@ -84,6 +86,7 @@ public class BreakMonitor extends MonitorFactory
         public class BreakProbe extends Simulator.Probe.Empty
         {
 
+            @Override
             public void fireBefore(State state, int pc)
             {
                 LegacyState s = (LegacyState) simulator.getState();
@@ -104,6 +107,7 @@ public class BreakMonitor extends MonitorFactory
         }
 
 
+        @Override
         public void report()
         {
             // do nothing
@@ -120,6 +124,7 @@ public class BreakMonitor extends MonitorFactory
     }
 
 
+    @Override
     public Monitor newMonitor(Simulator s)
     {
         return new Mon(s);

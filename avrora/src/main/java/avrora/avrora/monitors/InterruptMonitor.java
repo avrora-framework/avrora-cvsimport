@@ -32,13 +32,18 @@
 
 package avrora.avrora.monitors;
 
-import avrora.avrora.sim.*;
-import avrora.avrora.sim.output.SimPrinter;
-import avrora.avrora.sim.mcu.MCUProperties;
-import avrora.cck.stat.MinMaxMean;
-import avrora.cck.text.*;
-import avrora.cck.util.Option;
 import java.util.Arrays;
+
+import avrora.avrora.sim.InterruptTable;
+import avrora.avrora.sim.Simulator;
+import avrora.avrora.sim.State;
+import avrora.avrora.sim.mcu.MCUProperties;
+import avrora.avrora.sim.output.SimPrinter;
+import avrora.cck.stat.MinMaxMean;
+import avrora.cck.text.StringUtil;
+import avrora.cck.text.TermUtil;
+import avrora.cck.text.Terminal;
+import avrora.cck.util.Option;
 
 /**
  * The <code>InterruptMonitor</code> class implements a monitor that tracks the
@@ -131,6 +136,7 @@ public class InterruptMonitor extends MonitorFactory
          * @param inum
          *            the number of the interrupt being entered
          */
+        @Override
         public void fireBeforeInvoke(State s, int inum)
         {
             if (show)
@@ -163,6 +169,7 @@ public class InterruptMonitor extends MonitorFactory
          * @param inum
          *            the number of the interrupt being entered
          */
+        @Override
         public void fireAfterInvoke(State s, int inum)
         {
             long time = s.getCycles();
@@ -183,6 +190,7 @@ public class InterruptMonitor extends MonitorFactory
          * @param inum
          *            the number of the interrupt being masked out
          */
+        @Override
         public void fireWhenDisabled(State s, int inum)
         {
             if (show && !invokeOnly)
@@ -205,6 +213,7 @@ public class InterruptMonitor extends MonitorFactory
          * @param inum
          *            the number of the interrupt being unmasked
          */
+        @Override
         public void fireWhenEnabled(State s, int inum)
         {
             if (show && !invokeOnly)
@@ -228,6 +237,7 @@ public class InterruptMonitor extends MonitorFactory
          * @param inum
          *            the number of the interrupt being posted
          */
+        @Override
         public void fireWhenPosted(State s, int inum)
         {
             if (show && !invokeOnly)
@@ -250,6 +260,7 @@ public class InterruptMonitor extends MonitorFactory
          * @param inum
          *            the number of the interrupt being unposted
          */
+        @Override
         public void fireWhenUnposted(State s, int inum)
         {
             if (show && !invokeOnly)
@@ -259,6 +270,7 @@ public class InterruptMonitor extends MonitorFactory
         }
 
 
+        @Override
         public void report()
         {
             TermUtil.printSeparator(
@@ -333,6 +345,7 @@ public class InterruptMonitor extends MonitorFactory
      *            the simulator to create the monitor for
      * @return a new monitor instance for the specified simulator
      */
+    @Override
     public Monitor newMonitor(Simulator s)
     {
         return new Mon(s);

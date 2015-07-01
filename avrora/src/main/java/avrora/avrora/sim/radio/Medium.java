@@ -33,13 +33,14 @@
  */
 package avrora.avrora.sim.radio;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.clock.Clock;
 import avrora.avrora.sim.clock.Synchronizer;
-import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.util.TransactionalList;
-
-import java.util.*;
-
 import avrora.cck.util.Arithmetic;
 
 /**
@@ -55,7 +56,7 @@ public class Medium
     private static final int BYTE_SIZE = 8;
 
     private static int Pn = -95;// Noise Power in dBm
-    private static double Pr = (double) Pn;// Received Power in dBm
+    private static double Pr = Pn;// Received Power in dBm
 
     public interface Arbitrator
     {
@@ -93,21 +94,25 @@ public class Medium
 
         public class Empty implements Probe
         {
+            @Override
             public void fireBeforeTransmit(Transmitter t, byte val)
             {
             }
 
 
+            @Override
             public void fireBeforeTransmitEnd(Transmitter t)
             {
             }
 
 
+            @Override
             public void fireAfterReceive(Receiver r, char val)
             {
             }
 
 
+            @Override
             public void fireAfterReceiveEnd(Receiver r)
             {
             }
@@ -119,6 +124,7 @@ public class Medium
          */
         public class List extends TransactionalList implements Probe
         {
+            @Override
             public void fireBeforeTransmit(Transmitter t, byte val)
             {
                 beginTransaction();
@@ -128,6 +134,7 @@ public class Medium
             }
 
 
+            @Override
             public void fireBeforeTransmitEnd(Transmitter t)
             {
                 beginTransaction();
@@ -137,6 +144,7 @@ public class Medium
             }
 
 
+            @Override
             public void fireAfterReceive(Receiver r, char val)
             {
                 beginTransaction();
@@ -146,6 +154,7 @@ public class Medium
             }
 
 
+            @Override
             public void fireAfterReceiveEnd(Receiver r)
             {
                 beginTransaction();
@@ -296,6 +305,7 @@ public class Medium
 
         protected class Ticker implements Simulator.Event
         {
+            @Override
             public void fire()
             {
                 if (shutdown)
@@ -397,6 +407,7 @@ public class Medium
         protected class Ticker implements Simulator.Event
         {
 
+            @Override
             public void fire()
             {
                 if (activated)
@@ -723,6 +734,7 @@ public class Medium
 
     public static class BasicArbitrator implements Arbitrator
     {
+        @Override
         public boolean lockTransmission(Receiver receiver, Transmission trans,
                 int Milliseconds)
         {
@@ -730,6 +742,7 @@ public class Medium
         }
 
 
+        @Override
         public char mergeTransmissions(Receiver receiver, List<Transmission> it,
                 long bit, int Milliseconds)
         {
@@ -748,6 +761,7 @@ public class Medium
         }
 
 
+        @Override
         public double computeReceivedPower(Medium.Transmission t,
                 Medium.Receiver receiver, int Milliseconds)
         {
@@ -755,6 +769,7 @@ public class Medium
         }
 
 
+        @Override
         public int getNoise(int index)
         {
             return Pn;

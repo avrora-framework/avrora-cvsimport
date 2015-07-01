@@ -32,11 +32,15 @@
 
 package avrora.avrora.sim;
 
-import avrora.avrora.arch.legacy.*;
+import java.util.Arrays;
+
+import avrora.avrora.arch.legacy.LegacyInstr;
+import avrora.avrora.arch.legacy.LegacyInstrProperties;
+import avrora.avrora.arch.legacy.LegacyInstrVisitor;
+import avrora.avrora.arch.legacy.LegacyOperand;
 import avrora.avrora.core.Program;
 import avrora.avrora.sim.util.MulticastProbe;
 import avrora.cck.util.Util;
-import java.util.Arrays;
 
 /**
  * The <code>CodeSegment</code> class represents a segment of memory that stores
@@ -100,6 +104,7 @@ public class CodeSegment extends Segment
         }
 
 
+        @Override
         public CodeSegment newCodeSegment(String name, AtmelInterpreter bi,
                 Program p)
         {
@@ -368,6 +373,7 @@ public class CodeSegment extends Segment
         }
 
 
+        @Override
         public void accept(LegacyInstrVisitor v)
         {
             probe.fireBefore(interpreter.state, address);
@@ -384,6 +390,7 @@ public class CodeSegment extends Segment
         }
 
 
+        @Override
         public LegacyInstr build(int address, LegacyOperand[] ops)
         {
             throw Util.failure(
@@ -391,12 +398,14 @@ public class CodeSegment extends Segment
         }
 
 
+        @Override
         public String getOperands()
         {
             return instr.getOperands();
         }
 
 
+        @Override
         public LegacyInstr asInstr()
         {
             return instr;
@@ -422,6 +431,7 @@ public class CodeSegment extends Segment
          *
          * @return a string representing the operands of the instruction
          */
+        @Override
         public String getOperands()
         {
             throw Util.failure("no instruction here");
@@ -437,6 +447,7 @@ public class CodeSegment extends Segment
          * @param v
          *            the visitor to accept
          */
+        @Override
         public void accept(LegacyInstrVisitor v)
         {
             throw new InterpreterError.NoSuchInstructionException(
@@ -457,12 +468,14 @@ public class CodeSegment extends Segment
          * @return a new <code>LegacyInstr</code> instance representing the
          *         instruction with the given operands
          */
+        @Override
         public LegacyInstr build(int pc, LegacyOperand[] ops)
         {
             throw Util.failure("no instruction here");
         }
 
 
+        @Override
         public LegacyInstr asInstr()
         {
             return null;

@@ -34,13 +34,46 @@
 
 package avrora.jintgen.isdl.verifier;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 import avrora.cck.util.Arithmetic;
 import avrora.cck.util.Util;
-import avrora.jintgen.isdl.*;
+import avrora.jintgen.isdl.AddrModeDecl;
+import avrora.jintgen.isdl.ArchDecl;
+import avrora.jintgen.isdl.Environment;
+import avrora.jintgen.isdl.InstrDecl;
+import avrora.jintgen.isdl.OperandTypeDecl;
+import avrora.jintgen.isdl.SubroutineDecl;
 import avrora.jintgen.isdl.parser.Token;
-import avrora.jintgen.jigir.*;
-import avrora.jintgen.types.*;
-import java.util.*;
+import avrora.jintgen.jigir.AssignStmt;
+import avrora.jintgen.jigir.BinOpExpr;
+import avrora.jintgen.jigir.CallExpr;
+import avrora.jintgen.jigir.CallStmt;
+import avrora.jintgen.jigir.CodeAccumulator;
+import avrora.jintgen.jigir.CommentStmt;
+import avrora.jintgen.jigir.ConversionExpr;
+import avrora.jintgen.jigir.Decl;
+import avrora.jintgen.jigir.DeclStmt;
+import avrora.jintgen.jigir.DotExpr;
+import avrora.jintgen.jigir.Expr;
+import avrora.jintgen.jigir.FixedRangeExpr;
+import avrora.jintgen.jigir.IfStmt;
+import avrora.jintgen.jigir.IndexExpr;
+import avrora.jintgen.jigir.JIGIRTypeEnv;
+import avrora.jintgen.jigir.Literal;
+import avrora.jintgen.jigir.ReadExpr;
+import avrora.jintgen.jigir.ReturnStmt;
+import avrora.jintgen.jigir.Stmt;
+import avrora.jintgen.jigir.StmtAccumulator;
+import avrora.jintgen.jigir.UnOpExpr;
+import avrora.jintgen.jigir.VarExpr;
+import avrora.jintgen.jigir.WriteStmt;
+import avrora.jintgen.types.Type;
+import avrora.jintgen.types.TypeCon;
+import avrora.jintgen.types.TypeRef;
 
 /**
  * The <code>TypeChecker</code> implements typecheck of JIGIR code. It visits
@@ -67,6 +100,7 @@ public class TypeChecker extends VerifierPass
     }
 
 
+    @Override
     public void verify()
     {
         typeCheckAccessMethods();
@@ -189,6 +223,7 @@ public class TypeChecker extends VerifierPass
     }
 
 
+    @Override
     public Environment visit(CallStmt s, Environment env)
     {
         SubroutineDecl d = typeCheckCall(env, s.method, s.args);
@@ -197,6 +232,7 @@ public class TypeChecker extends VerifierPass
     }
 
 
+    @Override
     public Environment visit(WriteStmt s, Environment env)
     {
         OperandTypeDecl d = operandTypeOf(s.operand, env);
@@ -238,7 +274,10 @@ public class TypeChecker extends VerifierPass
     {
         SubroutineDecl d = env.resolveSubroutine(method.image);
         if (d == null)
+        {
             ERROR.UnresolvedSubroutine(method);
+            throw new IllegalArgumentException("unresolved subroutine");
+        }
         Iterator<Expr> eiter = args.iterator();
         if (d.getParams().size() != args.size())
             ERROR.ArityMismatch(method);
@@ -251,12 +290,14 @@ public class TypeChecker extends VerifierPass
     }
 
 
+    @Override
     public Environment visit(CommentStmt s, Environment env)
     {
         return env;
     }
 
 
+    @Override
     public Environment visit(DeclStmt s, Environment env)
     {
         if (env.isDefinedLocally(s.name.image))
@@ -268,6 +309,7 @@ public class TypeChecker extends VerifierPass
     }
 
 
+    @Override
     public Environment visit(IfStmt s, Environment env)
     {
         typeCheck("if condition", s.cond, typeEnv.BOOLEAN, env);
@@ -279,6 +321,7 @@ public class TypeChecker extends VerifierPass
     }
 
 
+    @Override
     public List<Environment> visitStmtList(List<Stmt> l, Environment env)
     {
         for (Stmt s : l)
@@ -287,15 +330,21 @@ public class TypeChecker extends VerifierPass
     }
 
 
+    @Override
     public Environment visit(ReturnStmt s, Environment env)
     {
         if (retType == null)
+        {
             ERROR.ReturnStmtNotInSubroutine(s);
+            throw new IllegalStateException(
+                    "retrun statement not in subroutine");
+        }
         typeCheck("return", s.expr, retType, env);
         return env;
     }
 
 
+    @Override
     public Environment visit(AssignStmt s, Environment env)
     {
         if (!s.dest.isLvalue())
@@ -306,42 +355,51 @@ public class TypeChecker extends VerifierPass
     }
 
 
+    @Override
     public Environment visit(AssignStmt.Var s, Environment env)
     {
         throw Util.unimplemented();
     }
 
 
+    @Override
     public Environment visit(AssignStmt.Map s, Environment env)
     {
         throw Util.unimplemented();
     }
 
 
+    @Override
     public Environment visit(AssignStmt.Bit s, Environment env)
     {
         throw Util.unimplemented();
     }
 
 
+    @Override
     public Environment visit(AssignStmt.FixedRange s, Environment env)
     {
         throw Util.unimplemented();
     }
 
 
+    @Override
     public Type visit(BinOpExpr e, Environment env)
     {
         Type lt = typeOf(e.left, env);
         Type rt = typeOf(e.right, env);
         TypeCon.BinOp binop = typeEnv.resolveBinOp(lt, rt, e.operation.image);
         if (binop == null)
+        {
             ERROR.UnresolvedOperator(e.operation, lt, rt);
+            throw new IllegalStateException("unresolved operator");
+        }
         e.setBinOp((BinOpExpr.BinOpImpl) binop);
         return binop.typeCheck(typeEnv, e.left, e.right);
     }
 
 
+    @Override
     public Type visit(IndexExpr e, Environment env)
     {
         Type lt = typeOf(e.expr, env);
@@ -365,6 +423,7 @@ public class TypeChecker extends VerifierPass
     }
 
 
+    @Override
     public Type visit(FixedRangeExpr e, Environment env)
     {
         Type lt = intTypeOf(e.expr, env);
@@ -383,6 +442,7 @@ public class TypeChecker extends VerifierPass
     }
 
 
+    @Override
     public List<Type> visitExprList(List<Expr> l, Environment env)
     {
         List<Type> lt = new LinkedList<Type>();
@@ -392,6 +452,7 @@ public class TypeChecker extends VerifierPass
     }
 
 
+    @Override
     public Type visit(CallExpr e, Environment env)
     {
         SubroutineDecl d = typeCheckCall(env, e.method, e.args);
@@ -400,6 +461,7 @@ public class TypeChecker extends VerifierPass
     }
 
 
+    @Override
     public Type visit(ReadExpr e, Environment env)
     {
         OperandTypeDecl d = operandTypeOf(e.operand, env);
@@ -410,6 +472,7 @@ public class TypeChecker extends VerifierPass
     }
 
 
+    @Override
     public Type visit(ConversionExpr e, Environment env)
     {
         Type ft = typeOf(e.expr, env);
@@ -422,12 +485,14 @@ public class TypeChecker extends VerifierPass
     }
 
 
+    @Override
     public Type visit(Literal.BoolExpr e, Environment env)
     {
         return typeEnv.BOOLEAN;
     }
 
 
+    @Override
     public Type visit(Literal.IntExpr e, Environment env)
     {
         return getTypeOfLiteral(typeEnv, e.value);
@@ -449,33 +514,43 @@ public class TypeChecker extends VerifierPass
     }
 
 
+    @Override
     public Type visit(Literal.EnumVal e, Environment env)
     {
         return typeEnv.resolveType(e.enumDecl.name);
     }
 
 
+    @Override
     public Type visit(UnOpExpr e, Environment env)
     {
         Type lt = typeOf(e.expr, env);
         TypeCon.UnOp unop = typeEnv.resolveUnOp(lt, e.operation.image);
         if (unop == null)
+        {
             ERROR.UnresolvedOperator(e.operation, lt);
+            throw new IllegalStateException("unresolved operator");
+        }
         e.setUnOp((UnOpExpr.UnOpImpl) unop);
         return unop.typeCheck(typeEnv, e.expr);
     }
 
 
+    @Override
     public Type visit(VarExpr e, Environment env)
     {
         Decl d = env.resolveDecl(e.variable.image);
         if (d == null)
+        {
             ERROR.UnresolvedVariable(e.variable);
+            throw new IllegalStateException("unresolved variable");
+        }
         e.setDecl(d);
         return d.getType();
     }
 
 
+    @Override
     public Type visit(DotExpr e, Environment env)
     {
         Type t = typeOf(e.expr, env);
@@ -503,6 +578,7 @@ public class TypeChecker extends VerifierPass
                 if (subOperand == null)
                 {
                     ERROR.UnresolvedSubOperand(e.field);
+                    throw new IllegalStateException("unresolved operand");
                 }
 
                 return subOperand.typeRef.resolve(arch.typeEnv);
@@ -540,7 +616,10 @@ public class TypeChecker extends VerifierPass
     {
         Decl d = env.resolveDecl(o.image);
         if (d == null)
+        {
             ERROR.UnresolvedVariable(o);
+            throw new IllegalStateException("unresolved variable");
+        }
         Type t = d.getType();
         TypeCon tc = t.getTypeCon();
         if (!(tc instanceof JIGIRTypeEnv.TYPE_operand))

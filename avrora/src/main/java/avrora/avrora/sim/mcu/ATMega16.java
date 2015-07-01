@@ -32,13 +32,18 @@
 
 package avrora.avrora.sim.mcu;
 
+import java.util.HashMap;
+
 import avrora.avrora.arch.avr.AVRProperties;
 import avrora.avrora.arch.legacy.LegacyInterpreter;
 import avrora.avrora.core.Program;
-import avrora.avrora.sim.*;
+import avrora.avrora.sim.ActiveRegister;
+import avrora.avrora.sim.AtmelInterpreter;
+import avrora.avrora.sim.FiniteStateMachine;
+import avrora.avrora.sim.RWRegister;
+import avrora.avrora.sim.Simulation;
 import avrora.avrora.sim.clock.ClockDomain;
 import avrora.cck.util.Arithmetic;
-import java.util.HashMap;
 
 /**
  * The <code>ATMega16</code> class represents the ATMega16 microcontroller from
@@ -272,6 +277,7 @@ public class ATMega16 extends ATMegaFamily
          *            <code>Microcontroller</code> instance that represents the
          *            specific hardware device with the program loaded onto it
          */
+        @Override
         public Microcontroller newMicrocontroller(int id, Simulation sim,
                 ClockDomain cd, Program p)
         {
@@ -338,6 +344,7 @@ public class ATMega16 extends ATMegaFamily
     private static final int[] MCUCR_sm_perm = { 2, 4, 3 };
 
 
+    @Override
     protected int getSleepMode()
     {
         byte value = MCUCR_reg.read();
@@ -380,6 +387,7 @@ public class ATMega16 extends ATMegaFamily
             static final int TCR2UB = 0;
 
 
+            @Override
             public void write(byte val)
             {
                 super.write((byte) (0xf & val));

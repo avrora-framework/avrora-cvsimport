@@ -33,8 +33,15 @@
  */
 package avrora.jintgen.gen;
 
-import avrora.jintgen.jigir.*;
 import java.util.List;
+
+import avrora.jintgen.jigir.DeclStmt;
+import avrora.jintgen.jigir.Expr;
+import avrora.jintgen.jigir.ReadExpr;
+import avrora.jintgen.jigir.Stmt;
+import avrora.jintgen.jigir.StmtRebuilder;
+import avrora.jintgen.jigir.VarExpr;
+import avrora.jintgen.jigir.WriteStmt;
 
 /**
  * @author Ben L. Titzer
@@ -51,24 +58,28 @@ public abstract class CodeProcessor<Env> extends StmtRebuilder<Env>
     }
 
 
+    @Override
     public Expr visit(VarExpr e, Env env)
     {
         return renamer.getVarExpr(e);
     }
 
 
+    @Override
     public Expr visit(ReadExpr e, Env env)
     {
         return renamer.getReadExpr(e);
     }
 
 
+    @Override
     public Stmt visit(DeclStmt s, Env env)
     {
         return renamer.getDecl((DeclStmt) super.visit(s, env));
     }
 
 
+    @Override
     public Stmt visit(WriteStmt s, Env env)
     {
         return renamer.getWrite((WriteStmt) super.visit(s, env));

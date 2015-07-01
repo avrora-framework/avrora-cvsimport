@@ -32,13 +32,25 @@
 
 package avrora.avrora.gui;
 
-import avrora.cck.text.Terminal;
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JSpinner;
+import javax.swing.OverlayLayout;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import avrora.cck.text.Terminal;
 
 /**
  * This is a generic helper class for visual monitors. It's purpose is to help
@@ -376,6 +388,7 @@ public class GraphEvents extends JPanel
      * everytime its called (to improve performance, we could make use of an
      * update function) The code here is actually faily ugly but eh..
      */
+    @Override
     public void paint(Graphics g)
     {
 
@@ -474,7 +487,8 @@ public class GraphEvents extends JPanel
                 // Here we do this check to see if we start our area
                 // with a light enabled
                 boolean startColorOn = false;
-                if (i % 2 == 1)
+                if (i % 2 != 0) // comparison to 0 is necessary since if i<0
+                                // this holds (a/b)*b+(a%b)
                 {
                     // if odd, then we start with a color being on from the
                     // beginning
@@ -540,6 +554,7 @@ public class GraphEvents extends JPanel
      * @param e
      *            Information about what event occured
      */
+    @Override
     public void stateChanged(ChangeEvent e)
     {
         if (e.getSource() == stepsizeVisual)
@@ -554,6 +569,7 @@ public class GraphEvents extends JPanel
      * If the scroll bar was adjusted, we should repaint. This method takes care
      * of that
      */
+    @Override
     public void adjustmentValueChanged(AdjustmentEvent e)
     {
         repaint();

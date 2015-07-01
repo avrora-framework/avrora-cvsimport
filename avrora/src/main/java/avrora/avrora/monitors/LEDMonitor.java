@@ -6,8 +6,8 @@
  */
 package avrora.avrora.monitors;
 
-import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.FiniteStateMachine;
+import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.output.SimPrinter;
 import avrora.avrora.sim.platform.LED;
 import avrora.avrora.sim.platform.Platform;
@@ -53,12 +53,14 @@ public class LEDMonitor extends MonitorFactory
         }
 
 
+        @Override
         public void fireBeforeTransition(int beforeState, int afterState)
         {
             // do nothing.
         }
 
 
+        @Override
         public void fireAfterTransition(int beforeState, int afterState)
         {
             if (beforeState == afterState)
@@ -77,6 +79,7 @@ public class LEDMonitor extends MonitorFactory
         }
 
 
+        @Override
         public void report()
         {
             // do nothing.
@@ -84,6 +87,7 @@ public class LEDMonitor extends MonitorFactory
     }
 
 
+    @Override
     public Monitor newMonitor(Simulator s)
     {
         return new Mon(s);

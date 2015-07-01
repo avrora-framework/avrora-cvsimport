@@ -32,16 +32,26 @@
 
 package avrora.avrora.actions;
 
-import avrora.avrora.core.*;
-import avrora.avrora.core.SourceMapping.Location;
-import avrora.avrora.sim.*;
-import avrora.avrora.sim.util.SimUtil;
-import avrora.avrora.Defaults;
-import avrora.avrora.monitors.Monitor;
-import avrora.cck.text.*;
-import avrora.cck.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
-import java.util.*;
+import avrora.avrora.Defaults;
+import avrora.avrora.core.Program;
+import avrora.avrora.core.SourceMapping;
+import avrora.avrora.core.SourceMapping.Location;
+import avrora.avrora.monitors.Monitor;
+import avrora.avrora.sim.Simulation;
+import avrora.avrora.sim.Simulator;
+import avrora.avrora.sim.State;
+import avrora.avrora.sim.util.SimUtil;
+import avrora.cck.text.StringUtil;
+import avrora.cck.text.TermUtil;
+import avrora.cck.text.Terminal;
+import avrora.cck.util.Option;
+import avrora.cck.util.TimeUtil;
+import avrora.cck.util.Util;
 
 /**
  * The <code>SimAction</code> is an abstract class that collects many of the
@@ -90,10 +100,10 @@ public class SimAction extends Action
      *             if there is a problem loading the program, or an exception
      *             occurs during simulation
      */
+    @Override
     public void run(String[] args) throws Exception
     {
-        SimUtil.REPORT_SECONDS = REPORT_SECONDS.get();
-        SimUtil.SECONDS_PRECISION = (int) SECONDS_PRECISION.get();
+        setupSecondsAntPrecision();
 
         simulation = Defaults.getSimulation(SIMULATION.get());
         simulation.process(options, args);
@@ -117,6 +127,13 @@ public class SimAction extends Action
             exitSimulation(null);
             Runtime.getRuntime().removeShutdownHook(shutdownThread);
         }
+    }
+
+
+    private void setupSecondsAntPrecision()
+    {
+        SimUtil.REPORT_SECONDS = REPORT_SECONDS.get();
+        SimUtil.SECONDS_PRECISION = (int) SECONDS_PRECISION.get();
     }
 
 
@@ -367,6 +384,7 @@ public class SimAction extends Action
 
     public class ShutdownThread extends Thread
     {
+        @Override
         public void run()
         {
             exitSimulation(new AsynchronousExit());

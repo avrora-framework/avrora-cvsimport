@@ -36,17 +36,22 @@
 
 package avrora.avrora.monitors;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.State;
-import avrora.avrora.sim.output.SimPrinter;
 import avrora.avrora.sim.clock.Clock;
-import avrora.avrora.sim.energy.*;
+import avrora.avrora.sim.energy.Energy;
+import avrora.avrora.sim.energy.EnergyControl;
+import avrora.avrora.sim.energy.EnergyObserver;
+import avrora.avrora.sim.output.SimPrinter;
 import avrora.avrora.sim.platform.Platform;
-import avrora.cck.text.Terminal;
 import avrora.cck.text.TermUtil;
+import avrora.cck.text.Terminal;
 import avrora.cck.util.Option;
 import avrora.cck.util.Util;
-import java.io.*;
 
 /**
  * energy monitor implementation this class handles logging and recording of
@@ -128,6 +133,7 @@ public class EnergyMonitor extends MonitorFactory
          *
          * @see avrora.monitors.Monitor#report()
          */
+        @Override
         public void report()
         {
             // simulation will end
@@ -172,6 +178,7 @@ public class EnergyMonitor extends MonitorFactory
             }
 
 
+            @Override
             public void fire()
             {
                 double totalEnergy = 0.0d;
@@ -321,6 +328,7 @@ public class EnergyMonitor extends MonitorFactory
              *
              * @see EnergyObserver#stateChange(Energy)
              */
+            @Override
             public void stateChange(Energy energy)
             {
                 logOldState(energy);
@@ -397,6 +405,7 @@ public class EnergyMonitor extends MonitorFactory
      *
      * @see MonitorFactory#newMonitor(Simulator)
      */
+    @Override
     public avrora.avrora.monitors.Monitor newMonitor(Simulator s)
     {
         return new Monitor(s);

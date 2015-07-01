@@ -32,6 +32,15 @@
 
 package avrora.avrora.monitors;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
+import java.util.HashMap;
+
 import avrora.avrora.arch.legacy.LegacyRegister;
 import avrora.avrora.arch.legacy.LegacyState;
 import avrora.avrora.sim.Simulator;
@@ -42,12 +51,6 @@ import avrora.cck.text.Terminal;
 import avrora.cck.util.Option;
 import avrora.cck.util.Options;
 import avrora.cck.util.Util;
-import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
-import java.util.HashMap;
 
 /**
  * The <code>GDBServer</code> class implements a monitor that can communicate to
@@ -127,6 +130,7 @@ public class GDBServer extends MonitorFactory
         }
 
 
+        @Override
         public void report()
         {
             try
@@ -630,6 +634,7 @@ public class GDBServer extends MonitorFactory
             }
 
 
+            @Override
             public void fireBeforeRead(State s, int address)
             {
                 if (printer != null)
@@ -643,6 +648,7 @@ public class GDBServer extends MonitorFactory
             }
 
 
+            @Override
             public void fireBeforeWrite(State s, int address, byte val)
             {
                 if (printer != null)
@@ -663,6 +669,7 @@ public class GDBServer extends MonitorFactory
          */
         protected class StartupProbe implements Simulator.Probe
         {
+            @Override
             public void fireBefore(State s, int pc)
             {
                 if (printer != null)
@@ -692,6 +699,7 @@ public class GDBServer extends MonitorFactory
             }
 
 
+            @Override
             public void fireAfter(State s, int pc)
             {
                 // remove ourselves from the beginning of the program after it
@@ -707,6 +715,7 @@ public class GDBServer extends MonitorFactory
          */
         protected class BreakpointProbe extends Simulator.Probe.Empty
         {
+            @Override
             public void fireBefore(State s, int pc)
             {
                 if (printer != null)
@@ -727,6 +736,7 @@ public class GDBServer extends MonitorFactory
          */
         protected class StepProbe implements Simulator.Probe
         {
+            @Override
             public void fireBefore(State s, int pc)
             {
                 if (printer != null)
@@ -740,6 +750,7 @@ public class GDBServer extends MonitorFactory
             }
 
 
+            @Override
             public void fireAfter(State s, int pc)
             {
                 if (printer != null)
@@ -762,6 +773,7 @@ public class GDBServer extends MonitorFactory
     }
 
 
+    @Override
     public void processOptions(Options o)
     {
         super.processOptions(o);
@@ -793,6 +805,7 @@ public class GDBServer extends MonitorFactory
      */
     protected class EmptyMonitor implements Monitor
     {
+        @Override
         public void report()
         {
             // do nothing.
@@ -810,10 +823,11 @@ public class GDBServer extends MonitorFactory
      *            the simulator to create a monitor for
      * @return a new <code>Monitor</code> instance for the specified simulator
      */
+    @Override
     public Monitor newMonitor(Simulator s)
     {
         // get port for this node
-        Integer port = (Integer) portMap.get(new Integer(s.getID()));
+        Integer port = portMap.get(new Integer(s.getID()));
         if (port == null)
         {
             // no port given, install empty monitor

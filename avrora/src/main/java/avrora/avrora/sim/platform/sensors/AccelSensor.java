@@ -32,7 +32,8 @@
 
 package avrora.avrora.sim.platform.sensors;
 
-import avrora.avrora.sim.mcu.*;
+import avrora.avrora.sim.mcu.ADC;
+import avrora.avrora.sim.mcu.AtmelMicrocontroller;
 
 /**
  * The <code>AccelSensor</code> class implements a accelerometer like that
@@ -59,6 +60,7 @@ public class AccelSensor extends Sensor
 
     class ADCInput implements ADC.ADCInput
     {
+        @Override
         public float getVoltage()
         {
             if (data == null)

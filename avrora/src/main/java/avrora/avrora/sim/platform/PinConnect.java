@@ -32,14 +32,15 @@
 
 package avrora.avrora.sim.platform;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.SimulatorThread;
 import avrora.avrora.sim.clock.StepSynchronizer;
 import avrora.avrora.sim.clock.Synchronizer;
 import avrora.avrora.sim.mcu.Microcontroller;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Very simple implementation of pin interconnect between microcontrollers
@@ -171,7 +172,7 @@ public class PinConnect
         while (i.hasNext())
         {
             // get next node on the list
-            PinNode currNode = (PinNode) i.next();
+            PinNode currNode = i.next();
             // two-way communication links between neighboring modules
 
             // two-way communication links between neighboring modules
@@ -473,6 +474,7 @@ public class PinConnect
 
     protected class PinEvent implements Simulator.Event
     {
+        @Override
         public void fire()
         {
             // iterator over PinLinks

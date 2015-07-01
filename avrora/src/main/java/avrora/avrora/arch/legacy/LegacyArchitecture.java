@@ -34,7 +34,11 @@
 
 package avrora.avrora.arch.legacy;
 
-import avrora.avrora.arch.*;
+import avrora.avrora.arch.AbstractArchitecture;
+import avrora.avrora.arch.AbstractAssembler;
+import avrora.avrora.arch.AbstractDisassembler;
+import avrora.avrora.arch.AbstractInstr;
+import avrora.avrora.arch.AbstractParser;
 import avrora.cck.util.Util;
 
 /**
@@ -58,24 +62,28 @@ public class LegacyArchitecture implements AbstractArchitecture
      * @return an instance of the <code>AbstractDisassembler</code> interface
      *         appropriate for this architecture
      */
+    @Override
     public AbstractDisassembler getDisassembler()
     {
         return new LegacyDisassembler();
     }
 
 
+    @Override
     public AbstractAssembler getAssembler()
     {
         throw Util.unimplemented();
     }
 
 
+    @Override
     public AbstractParser getParser()
     {
         throw Util.unimplemented();
     }
 
 
+    @Override
     public AbstractInstr[] newInstrArray(int len)
     {
         return new LegacyInstr[len];

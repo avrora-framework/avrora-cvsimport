@@ -33,7 +33,9 @@
 package avrora.avrora.sim.platform.sensors;
 
 import avrora.avrora.sim.FiniteStateMachine;
-import avrora.avrora.sim.mcu.*;
+import avrora.avrora.sim.mcu.ADC;
+import avrora.avrora.sim.mcu.AtmelMicrocontroller;
+import avrora.avrora.sim.mcu.Microcontroller;
 
 /**
  * The <code>LightSensor</code> class implements a light sensor like that
@@ -67,6 +69,7 @@ public class LightSensor extends Sensor
 
     class OnPin implements Microcontroller.Pin.Output
     {
+        @Override
         public void write(boolean val)
         {
             on = val;
@@ -85,6 +88,7 @@ public class LightSensor extends Sensor
 
     class ADCInput implements ADC.ADCInput
     {
+        @Override
         public float getVoltage()
         {
             if (data == null)

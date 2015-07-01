@@ -32,10 +32,11 @@
 
 package avrora.avrora.syntax;
 
+import java.util.HashMap;
+
 import avrora.avrora.syntax.objdump.Token;
 import avrora.cck.parser.AbstractToken;
 import avrora.cck.text.StringUtil;
-import java.util.HashMap;
 
 /**
  * The <code>RawModule</code> is a subclass of <code>Module</code> that allows
@@ -85,7 +86,7 @@ public class RawModule extends Module
 
     public void enterSection(AbstractToken sect)
     {
-        section = (Section) sectionMap.get(sect.image);
+        section = sectionMap.get(sect.image);
         if (section.name.image.equals(".text")
                 || section.name.image.equals(".data"))
             enterProgramSegment();
@@ -156,6 +157,7 @@ public class RawModule extends Module
         }
 
 
+        @Override
         public void simplify()
         {
             segment.addLabel(name.image, vma_addr, lma_addr, 1);
@@ -168,6 +170,7 @@ public class RawModule extends Module
         }
 
 
+        @Override
         public String toString()
         {
             return "label: " + name + " in " + segment.getName() + " @ "
@@ -176,6 +179,7 @@ public class RawModule extends Module
     }
 
 
+    @Override
     protected void simplify(Item i)
     {
         try

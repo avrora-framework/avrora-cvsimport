@@ -33,7 +33,9 @@
 package avrora.avrora.sim.mcu;
 
 import avrora.avrora.arch.avr.AVRProperties;
-import avrora.avrora.sim.*;
+import avrora.avrora.sim.FiniteStateMachine;
+import avrora.avrora.sim.RW16Register;
+import avrora.avrora.sim.RWRegister;
 import avrora.avrora.sim.clock.ClockDomain;
 import avrora.cck.util.Arithmetic;
 
@@ -72,8 +74,8 @@ public abstract class ATMegaClassic extends ATMegaFamilyNew
             AtmelMicrocontroller.Pin pin = (AtmelMicrocontroller.Pin) m
                     .getPin("OC" + timerNumber);
             int interrupt = m.properties.getInterrupt(acfName);
-            addComparator(Comparator._,
-                    new OutputCompareUnit(n, m, Comparator._, interrupt, pin));
+            addComparator(Comparator.__,
+                    new OutputCompareUnit(n, m, Comparator.__, interrupt, pin));
 
             String ocfn = "OCF" + n;
             String ocrn = "OCR" + n;
@@ -87,30 +89,35 @@ public abstract class ATMegaClassic extends ATMegaFamilyNew
         }
 
 
+        @Override
         public int getCounter()
         {
             return TCNTn_reg.read();
         }
 
 
+        @Override
         public void setCounter(int count)
         {
             TCNTn_reg.write((byte) count);
         }
 
 
+        @Override
         public String getCounterName()
         {
             return "TCNT" + timerNumber;
         }
 
 
+        @Override
         public int getMax()
         {
             return 0xFF;
         }
 
 
+        @Override
         public void resetMode(int WGMn)
         {
             mode = modes[WGMn];
@@ -132,12 +139,14 @@ public abstract class ATMegaClassic extends ATMegaFamilyNew
             }
 
 
+            @Override
             int read()
             {
                 return OCRn_reg.read16();
             }
 
 
+            @Override
             int readBuffer()
             {
                 return OCRn_reg.readBuffer();
@@ -167,7 +176,7 @@ public abstract class ATMegaClassic extends ATMegaFamilyNew
             m.installIOReg("TCNT" + n + "L", TCNTnL_reg);
 
             addComparator(Comparator.I,
-                    new InputCompareUnit(n, m, Comparator._,
+                    new InputCompareUnit(n, m, Comparator.__,
                             m.properties.getInterrupt(cfn[0]),
                             (Pin) m.getPin("IC" + timerNumber)));
             addComparator(Comparator.A,
@@ -233,30 +242,35 @@ public abstract class ATMegaClassic extends ATMegaFamilyNew
         }
 
 
+        @Override
         public int getCounter()
         {
             return TCNTn_reg.read16();
         }
 
 
+        @Override
         public void setCounter(int count)
         {
             TCNTn_reg.write(count);
         }
 
 
+        @Override
         public String getCounterName()
         {
             return "TCNT" + timerNumber;
         }
 
 
+        @Override
         public int getMax()
         {
             return 0xFFFF;
         }
 
 
+        @Override
         public void resetMode(int WGMn)
         {
             mode = modes[WGMn];
@@ -284,12 +298,14 @@ public abstract class ATMegaClassic extends ATMegaFamilyNew
             }
 
 
+            @Override
             int read()
             {
                 return OCRnX_reg.read16();
             }
 
 
+            @Override
             int readBuffer()
             {
                 return OCRnX_reg.readBuffer();
@@ -321,12 +337,14 @@ public abstract class ATMegaClassic extends ATMegaFamilyNew
             }
 
 
+            @Override
             int read()
             {
                 return OCRnX_reg.read16();
             }
 
 
+            @Override
             int readBuffer()
             {
                 return OCRnX_reg.readBuffer();
@@ -358,6 +376,7 @@ public abstract class ATMegaClassic extends ATMegaFamilyNew
             static final int TCR0UB = 0;
 
 
+            @Override
             public void write(byte val)
             {
                 super.write((byte) (0xf & val));

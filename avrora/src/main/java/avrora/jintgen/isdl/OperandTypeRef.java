@@ -37,7 +37,10 @@ package avrora.jintgen.isdl;
 import avrora.cck.util.Util;
 import avrora.jintgen.isdl.parser.Token;
 import avrora.jintgen.jigir.JIGIRTypeEnv;
-import avrora.jintgen.types.*;
+import avrora.jintgen.types.Type;
+import avrora.jintgen.types.TypeCon;
+import avrora.jintgen.types.TypeEnv;
+import avrora.jintgen.types.TypeRef;
 
 /**
  * @author Ben L. Titzer
@@ -68,6 +71,7 @@ public class OperandTypeRef extends TypeRef
     }
 
 
+    @Override
     public Type resolve(TypeEnv te)
     {
         Type t = super.resolve(te);

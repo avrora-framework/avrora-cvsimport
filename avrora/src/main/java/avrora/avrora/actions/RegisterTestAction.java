@@ -33,10 +33,13 @@
  */
 package avrora.avrora.actions;
 
-import avrora.cck.util.Option;
+import avrora.avrora.sim.state.Register;
+import avrora.avrora.sim.state.RegisterUtil;
+import avrora.avrora.sim.state.RegisterView;
+import avrora.cck.text.StringUtil;
+import avrora.cck.text.Terminal;
 import avrora.cck.util.Arithmetic;
-import avrora.cck.text.*;
-import avrora.avrora.sim.state.*;
+import avrora.cck.util.Option;
 
 /**
  * The <code>InternalTestAction</code> definition implements an action that
@@ -71,6 +74,7 @@ public class RegisterTestAction extends Action
      *            the command line arguments; files containing tests to be run
      * @throws Exception
      */
+    @Override
     public void run(String[] args) throws Exception
     {
         detail = DETAIL.get();

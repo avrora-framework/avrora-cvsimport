@@ -32,10 +32,10 @@
 
 package avrora.cck.util;
 
+import java.io.File;
+
 import avrora.cck.text.StringUtil;
 import avrora.cck.text.Terminal;
-
-import java.io.File;
 
 /**
  * The <code>Util</code> class contains several utilities relating to exceptions
@@ -121,6 +121,7 @@ public class Util
         }
 
 
+        @Override
         public void report()
         {
             Terminal.print(Terminal.ERROR_COLOR, category);
@@ -150,6 +151,7 @@ public class Util
         }
 
 
+        @Override
         public void report()
         {
             Terminal.print(Terminal.ERROR_COLOR, "Unexpected exception");

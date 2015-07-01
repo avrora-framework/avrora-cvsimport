@@ -33,11 +33,14 @@
 package avrora.avrora.monitors;
 
 import avrora.avrora.arch.AbstractInstr;
-import avrora.avrora.core.*;
+import avrora.avrora.core.Program;
+import avrora.avrora.core.SourceMapping;
 import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.State;
 import avrora.avrora.sim.output.SimPrinter;
-import avrora.cck.text.*;
+import avrora.cck.text.StringUtil;
+import avrora.cck.text.TermUtil;
+import avrora.cck.text.Terminal;
 import avrora.cck.util.Option;
 import avrora.cck.util.Util;
 
@@ -78,12 +81,14 @@ public class TraceMonitor extends MonitorFactory
 
         public class GlobalProbe implements Simulator.Probe
         {
+            @Override
             public void fireBefore(State s, int addr)
             {
                 print(s, s.getInstr(addr));
             }
 
 
+            @Override
             public void fireAfter(State s, int addr)
             {
                 count++;
@@ -106,6 +111,7 @@ public class TraceMonitor extends MonitorFactory
             }
 
 
+            @Override
             public void fireBefore(State s, int addr)
             {
                 traceNum++;
@@ -126,6 +132,7 @@ public class TraceMonitor extends MonitorFactory
 
         public class StartEvent implements Simulator.Event
         {
+            @Override
             public void fire()
             {
                 simulator.insertProbe(PROBE);
@@ -147,6 +154,7 @@ public class TraceMonitor extends MonitorFactory
             }
 
 
+            @Override
             public void fireAfter(State s, int addr)
             {
                 nesting--;
@@ -238,7 +246,10 @@ public class TraceMonitor extends MonitorFactory
             SourceMapping lm = program.getSourceMapping();
             SourceMapping.Location loc = lm.getLocation(src);
             if (loc == null)
+            {
                 Util.userError("Invalid program address: ", src);
+                throw new IllegalStateException("invalid program address");
+            }
             if (program.readInstr(loc.lma_addr) == null)
                 Util.userError("Invalid program address: ", src);
             return loc;
@@ -263,6 +274,7 @@ public class TraceMonitor extends MonitorFactory
          * result is a table of performance information giving the number of
          * executions of each instruction, compressed for basic blocks.
          */
+        @Override
         public void report()
         {
             TermUtil.printSeparator(
@@ -300,6 +312,7 @@ public class TraceMonitor extends MonitorFactory
      * @return an instance of the <code>Monitor</code> interface that tracks
      *         performance information from the program
      */
+    @Override
     public Monitor newMonitor(Simulator s)
     {
         return new Mon(s);

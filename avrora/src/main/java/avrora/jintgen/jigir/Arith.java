@@ -34,7 +34,9 @@ package avrora.jintgen.jigir;
 
 import avrora.cck.util.Arithmetic;
 import avrora.cck.util.Util;
-import avrora.jintgen.types.*;
+import avrora.jintgen.types.Type;
+import avrora.jintgen.types.TypeEnv;
+import avrora.jintgen.types.Typeable;
 
 /**
  * The <code>Arith</code> class is a container for classes that represent
@@ -57,6 +59,7 @@ public class Arith
         }
 
 
+        @Override
         public Type typeCheck(TypeEnv env, Typeable left, Typeable right)
         {
             JIGIRTypeEnv jenv = (JIGIRTypeEnv) env;
@@ -66,6 +69,7 @@ public class Arith
         }
 
 
+        @Override
         public Literal evaluate(Literal left, Literal right)
         {
             int ll = ((Literal.IntExpr) left).value;
@@ -89,6 +93,7 @@ public class Arith
         }
 
 
+        @Override
         public Type typeCheck(JIGIRTypeEnv jenv, JIGIRTypeEnv.TYPE_int lt,
                 JIGIRTypeEnv.TYPE_int rt)
         {
@@ -97,6 +102,7 @@ public class Arith
         }
 
 
+        @Override
         public int evaluate(int ll, int lr)
         {
             return ll + lr;
@@ -111,6 +117,7 @@ public class Arith
         }
 
 
+        @Override
         public Type typeCheck(JIGIRTypeEnv jenv, JIGIRTypeEnv.TYPE_int lt,
                 JIGIRTypeEnv.TYPE_int rt)
         {
@@ -118,6 +125,7 @@ public class Arith
         }
 
 
+        @Override
         public int evaluate(int ll, int lr)
         {
             return ll - lr;
@@ -132,6 +140,7 @@ public class Arith
         }
 
 
+        @Override
         public Type typeCheck(JIGIRTypeEnv jenv, JIGIRTypeEnv.TYPE_int lt,
                 JIGIRTypeEnv.TYPE_int rt)
         {
@@ -140,6 +149,7 @@ public class Arith
         }
 
 
+        @Override
         public int evaluate(int ll, int lr)
         {
             return ll * lr;
@@ -154,6 +164,7 @@ public class Arith
         }
 
 
+        @Override
         public Type typeCheck(JIGIRTypeEnv jenv, JIGIRTypeEnv.TYPE_int lt,
                 JIGIRTypeEnv.TYPE_int rt)
         {
@@ -162,6 +173,7 @@ public class Arith
         }
 
 
+        @Override
         public int evaluate(int ll, int lr)
         {
             return ll / lr;
@@ -176,6 +188,7 @@ public class Arith
         }
 
 
+        @Override
         public Type typeCheck(JIGIRTypeEnv jenv, JIGIRTypeEnv.TYPE_int lt,
                 JIGIRTypeEnv.TYPE_int rt)
         {
@@ -184,6 +197,7 @@ public class Arith
         }
 
 
+        @Override
         public int evaluate(int ll, int lr)
         {
             return ll % lr;
@@ -198,6 +212,7 @@ public class Arith
         }
 
 
+        @Override
         public Type typeCheck(JIGIRTypeEnv jenv, JIGIRTypeEnv.TYPE_int lt,
                 JIGIRTypeEnv.TYPE_int rt)
         {
@@ -206,6 +221,7 @@ public class Arith
         }
 
 
+        @Override
         public int evaluate(int ll, int lr)
         {
             return ll & lr;
@@ -220,6 +236,7 @@ public class Arith
         }
 
 
+        @Override
         public Type typeCheck(JIGIRTypeEnv jenv, JIGIRTypeEnv.TYPE_int lt,
                 JIGIRTypeEnv.TYPE_int rt)
         {
@@ -228,6 +245,7 @@ public class Arith
         }
 
 
+        @Override
         public int evaluate(int ll, int lr)
         {
             return ll | lr;
@@ -242,6 +260,7 @@ public class Arith
         }
 
 
+        @Override
         public Type typeCheck(JIGIRTypeEnv jenv, JIGIRTypeEnv.TYPE_int lt,
                 JIGIRTypeEnv.TYPE_int rt)
         {
@@ -250,6 +269,7 @@ public class Arith
         }
 
 
+        @Override
         public int evaluate(int ll, int lr)
         {
             return ll ^ lr;
@@ -264,6 +284,7 @@ public class Arith
         }
 
 
+        @Override
         public Type typeCheck(JIGIRTypeEnv jenv, JIGIRTypeEnv.TYPE_int lt,
                 JIGIRTypeEnv.TYPE_int rt)
         {
@@ -272,6 +293,7 @@ public class Arith
         }
 
 
+        @Override
         public int evaluate(int ll, int lr)
         {
             return ll << lr;
@@ -286,6 +308,7 @@ public class Arith
         }
 
 
+        @Override
         public Type typeCheck(JIGIRTypeEnv jenv, JIGIRTypeEnv.TYPE_int lt,
                 JIGIRTypeEnv.TYPE_int rt)
         {
@@ -294,6 +317,7 @@ public class Arith
         }
 
 
+        @Override
         public int evaluate(int ll, int lr)
         {
             return ll >> lr;
@@ -308,13 +332,15 @@ public class Arith
         }
 
 
+        @Override
         public Type typeCheck(TypeEnv env, Typeable inner)
         {
             // JIGIRTypeEnv jenv = (JIGIRTypeEnv)env;
-            return (JIGIRTypeEnv.TYPE_int) inner.getType();
+            return inner.getType();
         }
 
 
+        @Override
         public Literal evaluate(Literal inner)
         {
             int ll = ((Literal.IntExpr) inner).value;
@@ -330,6 +356,7 @@ public class Arith
         }
 
 
+        @Override
         public Type typeCheck(TypeEnv env, Typeable inner)
         {
             JIGIRTypeEnv jenv = (JIGIRTypeEnv) env;
@@ -338,6 +365,7 @@ public class Arith
         }
 
 
+        @Override
         public Literal evaluate(Literal inner)
         {
             int ll = ((Literal.IntExpr) inner).value;
@@ -353,6 +381,7 @@ public class Arith
         }
 
 
+        @Override
         public Type typeCheck(TypeEnv env, Typeable inner)
         {
             JIGIRTypeEnv jenv = (JIGIRTypeEnv) env;
@@ -361,6 +390,7 @@ public class Arith
         }
 
 
+        @Override
         public Literal evaluate(Literal inner)
         {
             throw Util.unimplemented();

@@ -32,9 +32,10 @@
 
 package avrora.avrora.sim.clock;
 
-import avrora.cck.text.StringUtil;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
+
+import avrora.cck.text.StringUtil;
 
 /**
  * The <code>ClockDomain</code> class represents a collection of clocks for a
@@ -91,7 +92,7 @@ public class ClockDomain
      */
     public Clock getClock(String name)
     {
-        Clock clock = (Clock) clockMap.get(name);
+        Clock clock = clockMap.get(name);
         if (clock == null)
             throw new NoSuchElementException(
                     StringUtil.quote(name) + " clock not found");

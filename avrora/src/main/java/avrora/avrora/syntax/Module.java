@@ -32,16 +32,24 @@
 
 package avrora.avrora.syntax;
 
-import avrora.avrora.arch.legacy.*;
-import avrora.avrora.core.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+
+import avrora.avrora.arch.legacy.LegacyArchitecture;
+import avrora.avrora.arch.legacy.LegacyInstr;
+import avrora.avrora.arch.legacy.LegacyInstrProto;
+import avrora.avrora.arch.legacy.LegacyInstrSet;
+import avrora.avrora.arch.legacy.LegacyRegister;
+import avrora.avrora.core.Program;
+import avrora.avrora.core.SourceMapping;
 import avrora.avrora.syntax.atmel.AtmelParser;
 import avrora.cck.parser.AbstractParseException;
 import avrora.cck.parser.AbstractToken;
 import avrora.cck.text.StringUtil;
 import avrora.cck.text.Verbose;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.*;
 
 /**
  * The <code>Module</code> class collects together the instructions and data
@@ -390,7 +398,13 @@ public class Module implements Context
     {
         Item.Instruction instr = null;
         if (i instanceof Item.Instruction)
+        {
             instr = (Item.Instruction) i;
+        } else
+        {
+            throw new IllegalStateException(
+                    "i is no instanceof Item.Instruction");
+        }
 
         try
         {
@@ -437,12 +451,13 @@ public class Module implements Context
     }
 
 
+    @Override
     public LegacyRegister getRegister(AbstractToken tok)
     {
         String name = labelName(tok);
         LegacyRegister reg = LegacyRegister.getRegisterByName(name);
         if (reg == null)
-            reg = (LegacyRegister) definitions.get(name);
+            reg = definitions.get(name);
 
         if (reg == null)
             ERROR.UnknownRegister(tok);
@@ -450,16 +465,20 @@ public class Module implements Context
     }
 
 
+    @Override
     public int getVariable(AbstractToken tok)
     {
         String name = labelName(tok);
 
-        Integer v = (Integer) constants.get(name);
+        Integer v = constants.get(name);
         if (v == null)
         {
             Item.Label li = (Item.Label) labels.get(name);
             if (li == null)
+            {
                 ERROR.UnknownVariable(tok);
+                throw new IllegalStateException("unknown variable");
+            }
             if (li.segment == programSegment && !useByteAddresses)
                 return li.getByteAddress() >> 1;
             else

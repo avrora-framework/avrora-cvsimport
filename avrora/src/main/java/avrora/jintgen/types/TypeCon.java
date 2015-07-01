@@ -34,7 +34,10 @@
 
 package avrora.jintgen.types;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The <code>TypeCon</code> class represents a type constructor that given a
@@ -213,6 +216,7 @@ public class TypeCon
     }
 
 
+    @Override
     public String toString()
     {
         StringBuffer buf = new StringBuffer();

@@ -32,13 +32,16 @@
 
 package avrora.avrora.sim.mcu;
 
-import avrora.avrora.sim.*;
-import avrora.avrora.sim.state.*;
+import java.util.LinkedList;
+
+import avrora.avrora.sim.RWRegister;
+import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.output.SimPrinter;
+import avrora.avrora.sim.state.BooleanView;
+import avrora.avrora.sim.state.RegisterUtil;
+import avrora.avrora.sim.state.RegisterView;
 import avrora.cck.text.StringUtil;
 import avrora.cck.util.Arithmetic;
-
-import java.util.LinkedList;
 
 /**
  * The USART class implements a Universal Synchronous Asynchronous
@@ -197,6 +200,7 @@ public class USART extends AtmelInternalDevice
         }
 
 
+        @Override
         public String toString()
         {
             return StringUtil.toMultirepString(value, size);
@@ -288,6 +292,7 @@ public class USART extends AtmelInternalDevice
             Frame frame;
 
 
+            @Override
             public void fire()
             {
                 connectedDevice.receiveFrame(frame);
@@ -337,6 +342,7 @@ public class USART extends AtmelInternalDevice
             Frame frame;
 
 
+            @Override
             public void fire()
             {
                 receiveFrame(frame);
@@ -374,6 +380,7 @@ public class USART extends AtmelInternalDevice
         }
 
 
+        @Override
         public void write(byte val)
         {
             transmitRegister.write(val);
@@ -387,6 +394,7 @@ public class USART extends AtmelInternalDevice
         }
 
 
+        @Override
         public byte read()
         {
             // if ( !true) UCSRnA_reg.RXC_flag.flag(false);
@@ -420,6 +428,7 @@ public class USART extends AtmelInternalDevice
             }
 
 
+            @Override
             public byte read()
             {
                 if (readyQueue.isEmpty())
@@ -428,8 +437,7 @@ public class USART extends AtmelInternalDevice
                                                     // data empty
                     return (byte) 0;
                 }
-                USARTFrameWrapper current = (USARTFrameWrapper) readyQueue
-                        .removeLast();
+                USARTFrameWrapper current = readyQueue.removeLast();
                 if (readyQueue.isEmpty())
                 {
                     UCSRnA_reg.RXC_flag.flag(false);
@@ -449,8 +457,7 @@ public class USART extends AtmelInternalDevice
                     UCSRnA_reg._dor.setValue(true);
                 } else
                 {
-                    USARTFrameWrapper current = (USARTFrameWrapper) (waitQueue
-                            .removeLast());
+                    USARTFrameWrapper current = waitQueue.removeLast();
                     current.frame = frame;
                     readyQueue.addFirst(current);
                 }
@@ -501,11 +508,12 @@ public class USART extends AtmelInternalDevice
         }
 
 
+        @Override
         public void write(byte val)
         {
             // bits 0 and 1 are R/W, all others read only. writing a 1 to bit 6
             // clears it.
-            if ((val & 0x40) == 1)
+            if ((val & 0x40) != 0)
                 value &= 0xBF;
             value = (byte) ((value & 0xFC) | (val & 0x3));
             // since RCX and UDRE cannot be changed, no sync is necessary
@@ -583,6 +591,7 @@ public class USART extends AtmelInternalDevice
     protected class UBRRnHReg extends RWRegister
     {
 
+        @Override
         public void write(byte val)
         {
             super.write((byte) (0x0f & val));
@@ -597,6 +606,7 @@ public class USART extends AtmelInternalDevice
     protected class UBRRnLReg extends RWRegister
     {
 
+        @Override
         public void write(byte val)
         {
             super.write(val);
@@ -620,12 +630,14 @@ public class USART extends AtmelInternalDevice
         int count;
 
 
+        @Override
         public Frame transmitFrame()
         {
             return new Frame((byte) stream[count++ % stream.length], false, 8);
         }
 
 
+        @Override
         public void receiveFrame(Frame frame)
         {
             if (serialPrinter != null)

@@ -32,11 +32,22 @@
 
 package avrora.avrora.stack.isea;
 
-import avrora.avrora.core.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Stack;
+
+import avrora.avrora.core.ControlFlowGraph;
 import avrora.avrora.core.ControlFlowGraph.Block;
-import avrora.cck.text.*;
+import avrora.avrora.core.ProcedureMap;
+import avrora.avrora.core.Program;
+import avrora.avrora.core.SourceMapping;
+import avrora.cck.text.StringUtil;
+import avrora.cck.text.TermUtil;
+import avrora.cck.text.Terminal;
+import avrora.cck.text.Verbose;
 import avrora.cck.util.Util;
-import java.util.*;
 
 /**
  * The <code>ISEAnalyzer</code> class is a static analyzer for machine code.
@@ -88,6 +99,7 @@ public class ISEAnalyzer implements ISEInterpreter.SummaryCache
     }
 
 
+    @Override
     public ISEState getProcedureSummary(int start)
     {
         ControlFlowGraph.Block block = cfg.getBlockStartingAt(start);
@@ -97,10 +109,11 @@ public class ISEAnalyzer implements ISEInterpreter.SummaryCache
                     + StringUtil.addrToString(start));
         }
         analyzeProcedure(block);
-        return (ISEState) procedureSummaries.get(block);
+        return procedureSummaries.get(block);
     }
 
 
+    @Override
     public void recordReturnSummary(int retaddr, ISEState rs)
     {
         ISEState ors = getReturnSummary(retaddr);
@@ -117,7 +130,7 @@ public class ISEAnalyzer implements ISEInterpreter.SummaryCache
 
     public ISEState getReturnSummary(int retaddr)
     {
-        return (ISEState) returnSummaries.get(new Integer(retaddr));
+        return returnSummaries.get(new Integer(retaddr));
     }
 
 

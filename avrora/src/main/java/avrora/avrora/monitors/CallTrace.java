@@ -33,9 +33,13 @@
  */
 package avrora.avrora.monitors;
 
-import avrora.avrora.arch.legacy.*;
+import avrora.avrora.arch.legacy.LegacyInstr;
+import avrora.avrora.arch.legacy.LegacyRegister;
+import avrora.avrora.arch.legacy.LegacyState;
 import avrora.avrora.core.Program;
-import avrora.avrora.sim.*;
+import avrora.avrora.sim.InterruptTable;
+import avrora.avrora.sim.Simulator;
+import avrora.avrora.sim.State;
 
 /**
  * The <code>CallTrace</code> class represents a trace of the call/return and
@@ -73,6 +77,7 @@ public class CallTrace
         }
 
 
+        @Override
         public void fireBefore(State state, int pc)
         {
             // generate call event
@@ -83,6 +88,7 @@ public class CallTrace
 
     protected class Probe_icall extends Simulator.Probe.Empty
     {
+        @Override
         public void fireBefore(State state, int pc)
         {
             // calculate target and generate call event
@@ -97,6 +103,7 @@ public class CallTrace
 
     protected class Probe_ret extends Simulator.Probe.Empty
     {
+        @Override
         public void fireAfter(State state, int pc)
         {
             // generate return event
@@ -108,6 +115,7 @@ public class CallTrace
 
     protected class Probe_iret extends Simulator.Probe.Empty
     {
+        @Override
         public void fireBefore(State state, int pc)
         {
             // generate interrupt return event
@@ -119,6 +127,7 @@ public class CallTrace
 
     protected class Probe_interrupt extends Simulator.InterruptProbe.Empty
     {
+        @Override
         public void fireBeforeInvoke(State s, int inum)
         {
             // do nothing.

@@ -33,7 +33,8 @@
 package avrora.avrora.sim.platform.sensors;
 
 import avrora.avrora.sim.FiniteStateMachine;
-import avrora.avrora.sim.mcu.*;
+import avrora.avrora.sim.mcu.AtmelMicrocontroller;
+import avrora.avrora.sim.mcu.Microcontroller;
 
 /**
  * The <code>AccelSensorPower</code> handles the Power pin for the acceleration
@@ -61,6 +62,7 @@ public class AccelSensorPower
 
     class OnPin implements Microcontroller.Pin.Output
     {
+        @Override
         public void write(boolean val)
         {
             on = val;

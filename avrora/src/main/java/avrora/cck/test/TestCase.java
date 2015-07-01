@@ -32,11 +32,11 @@
 
 package avrora.cck.test;
 
+import java.util.Properties;
+
 import avrora.cck.parser.SourceError;
 import avrora.cck.text.StringUtil;
 import avrora.cck.util.Util;
-
-import java.util.Properties;
 
 /**
  * The <code>TestCase</code> class encapsulates the notion of a test case in the
@@ -186,6 +186,7 @@ public abstract class TestCase
          *            test case
          * @return a new <code>TestResult</code> indicating success or error
          */
+        @Override
         public TestResult match(Throwable t)
         {
             return shouldPass ? expectPass(t) : expectError(t);
@@ -305,12 +306,14 @@ public abstract class TestCase
         }
 
 
+        @Override
         public void run()
         {
             // do nothing.
         }
 
 
+        @Override
         public TestResult match(Throwable t)
         {
             return new TestResult.Malformed(error);
@@ -329,12 +332,14 @@ public abstract class TestCase
         }
 
 
+        @Override
         public void run()
         {
             // do nothing.
         }
 
 
+        @Override
         public TestResult match(Throwable t)
         {
             return new TestResult.Malformed(thrown.toString());

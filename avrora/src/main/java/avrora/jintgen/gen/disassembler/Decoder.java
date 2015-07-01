@@ -32,15 +32,18 @@
 
 package avrora.jintgen.gen.disassembler;
 
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
 import avrora.cck.text.Printer;
 import avrora.cck.text.StringUtil;
 import avrora.cck.util.Util;
 import avrora.jintgen.gen.GenBase;
 import avrora.jintgen.isdl.FormatDecl;
 import avrora.jintgen.isdl.InstrDecl;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.util.*;
 
 /**
  * @author Ben L. Titzer
@@ -113,6 +116,7 @@ abstract class Decoder extends GenBase
         }
 
 
+        @Override
         void computeTree(int prio, DTNode root)
         {
             instrTrees[prio] = addFinalTree("instr" + prio,
@@ -136,6 +140,7 @@ abstract class Decoder extends GenBase
         }
 
 
+        @Override
         void generateDecoderConstructors()
         {
             for (int cntr = 0; cntr < addrTrees.length; cntr++)
@@ -152,6 +157,7 @@ abstract class Decoder extends GenBase
         }
 
 
+        @Override
         void generateDecoderMethod()
         {
             generateJavaDoc(
@@ -203,6 +209,7 @@ abstract class Decoder extends GenBase
         }
 
 
+        @Override
         void generateSpecialActions()
         {
             // in the parallel implementation, we need separate actions to set
@@ -260,6 +267,7 @@ abstract class Decoder extends GenBase
         }
 
 
+        @Override
         void generateSpecialFields()
         {
             println("int terminated;");
@@ -279,6 +287,7 @@ abstract class Decoder extends GenBase
         }
 
 
+        @Override
         void computeTree(int prio, DTNode root)
         {
             finalTrees[prio] = addFinalTree("root" + prio, optimizeTree(root));
@@ -292,6 +301,7 @@ abstract class Decoder extends GenBase
         }
 
 
+        @Override
         void generateDecoderConstructors()
         {
             String last = "ERROR";
@@ -310,6 +320,7 @@ abstract class Decoder extends GenBase
         }
 
 
+        @Override
         void generateDecoderMethod()
         {
             generateJavaDoc(
@@ -356,6 +367,7 @@ abstract class Decoder extends GenBase
         }
 
 
+        @Override
         void generateSpecialActions()
         {
             generateJavaDoc(
@@ -402,6 +414,7 @@ abstract class Decoder extends GenBase
         }
 
 
+        @Override
         void generateSpecialFields()
         {
 
@@ -790,6 +803,7 @@ abstract class Decoder extends GenBase
 
     class InstrActionGetter extends ActionGetter
     {
+        @Override
         String getAction(DTNode n)
         {
             String label = n.getLabel();
@@ -804,6 +818,7 @@ abstract class Decoder extends GenBase
 
     class AddrModeActionGetter extends ActionGetter
     {
+        @Override
         String getAction(DTNode n)
         {
             String label = n.getLabel();
@@ -819,6 +834,7 @@ abstract class Decoder extends GenBase
 
     class InstActionGetter extends ActionGetter
     {
+        @Override
         String getAction(DTNode n)
         {
             String label = n.getLabel();

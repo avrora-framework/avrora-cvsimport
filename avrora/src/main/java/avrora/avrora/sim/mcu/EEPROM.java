@@ -36,8 +36,8 @@ import avrora.avrora.sim.RWRegister;
 import avrora.avrora.sim.Simulator;
 import avrora.avrora.sim.state.BooleanView;
 import avrora.avrora.sim.state.RegisterUtil;
-import avrora.cck.util.Arithmetic;
 import avrora.cck.text.StringUtil;
+import avrora.cck.util.Arithmetic;
 
 /**
  * This is an implementation of the non-volatile EEPROM on the ATMega128
@@ -133,6 +133,7 @@ public class EEPROM extends AtmelInternalDevice
     protected class EEARHReg extends RWRegister
     {
 
+        @Override
         public void write(byte val)
         {
             // EEAR access not allowed during write
@@ -147,6 +148,7 @@ public class EEPROM extends AtmelInternalDevice
     protected class EEARLReg extends RWRegister
     {
 
+        @Override
         public void write(byte val)
         {
             // EEAR access not allowed during write
@@ -196,6 +198,7 @@ public class EEPROM extends AtmelInternalDevice
         }
 
 
+        @Override
         public void write(byte val)
         {
             value = (byte) (0xf & val);
@@ -238,6 +241,7 @@ public class EEPROM extends AtmelInternalDevice
     protected class EEPROMTicker implements Simulator.Event
     {
 
+        @Override
         public void fire()
         {
 
@@ -305,6 +309,7 @@ public class EEPROM extends AtmelInternalDevice
     protected class EEPROMWriteFinishedEvent implements Simulator.Event
     {
 
+        @Override
         public void fire()
         {
             if (devicePrinter != null)

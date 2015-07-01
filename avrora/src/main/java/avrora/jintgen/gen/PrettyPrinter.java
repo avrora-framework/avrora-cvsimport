@@ -32,11 +32,32 @@
 
 package avrora.jintgen.gen;
 
+import java.util.List;
+
 import avrora.cck.text.Printer;
 import avrora.jintgen.isdl.parser.Token;
-import avrora.jintgen.jigir.*;
+import avrora.jintgen.jigir.AssignStmt;
+import avrora.jintgen.jigir.BinOpExpr;
+import avrora.jintgen.jigir.CallExpr;
+import avrora.jintgen.jigir.CallStmt;
+import avrora.jintgen.jigir.CodeVisitor;
+import avrora.jintgen.jigir.CommentStmt;
+import avrora.jintgen.jigir.ConversionExpr;
+import avrora.jintgen.jigir.DeclStmt;
+import avrora.jintgen.jigir.DotExpr;
+import avrora.jintgen.jigir.Expr;
+import avrora.jintgen.jigir.FixedRangeExpr;
+import avrora.jintgen.jigir.IfStmt;
+import avrora.jintgen.jigir.IndexExpr;
+import avrora.jintgen.jigir.Literal;
+import avrora.jintgen.jigir.ReadExpr;
+import avrora.jintgen.jigir.ReturnStmt;
+import avrora.jintgen.jigir.Stmt;
+import avrora.jintgen.jigir.StmtVisitor;
+import avrora.jintgen.jigir.UnOpExpr;
+import avrora.jintgen.jigir.VarExpr;
+import avrora.jintgen.jigir.WriteStmt;
 import avrora.jintgen.types.TypeRef;
-import java.util.List;
 
 /**
  * @author Ben L. Titzer
@@ -46,6 +67,7 @@ public class PrettyPrinter implements StmtVisitor, CodeVisitor
     protected final Printer printer;
 
 
+    @Override
     public void visit(CallExpr e)
     {
         printer.print(getMethod(e.method.image) + '(');
@@ -54,6 +76,7 @@ public class PrettyPrinter implements StmtVisitor, CodeVisitor
     }
 
 
+    @Override
     public void visit(ReadExpr e)
     {
         printer.print("read");
@@ -65,6 +88,7 @@ public class PrettyPrinter implements StmtVisitor, CodeVisitor
     }
 
 
+    @Override
     public void visit(ConversionExpr e)
     {
         inner(e.expr, Expr.PREC_TERM);
@@ -72,12 +96,14 @@ public class PrettyPrinter implements StmtVisitor, CodeVisitor
     }
 
 
+    @Override
     public void visit(VarExpr e)
     {
         printer.print(getVariable(e.variable));
     }
 
 
+    @Override
     public void visit(DotExpr e)
     {
         e.expr.accept(this);
@@ -86,6 +112,7 @@ public class PrettyPrinter implements StmtVisitor, CodeVisitor
     }
 
 
+    @Override
     public void visit(AssignStmt s)
     {
         s.dest.accept(this);
@@ -95,6 +122,7 @@ public class PrettyPrinter implements StmtVisitor, CodeVisitor
     }
 
 
+    @Override
     public void visit(AssignStmt.Var s)
     {
         s.dest.accept(this);
@@ -104,6 +132,7 @@ public class PrettyPrinter implements StmtVisitor, CodeVisitor
     }
 
 
+    @Override
     public void visit(AssignStmt.Map s)
     {
         s.map.accept(this);
@@ -115,6 +144,7 @@ public class PrettyPrinter implements StmtVisitor, CodeVisitor
     }
 
 
+    @Override
     public void visit(AssignStmt.Bit s)
     {
         s.dest.accept(this);
@@ -126,6 +156,7 @@ public class PrettyPrinter implements StmtVisitor, CodeVisitor
     }
 
 
+    @Override
     public void visit(AssignStmt.FixedRange s)
     {
         s.dest.accept(this);
@@ -147,6 +178,7 @@ public class PrettyPrinter implements StmtVisitor, CodeVisitor
     }
 
 
+    @Override
     public void visit(CallStmt s)
     {
         printer.print(getMethod(s.method.image) + '(');
@@ -155,6 +187,7 @@ public class PrettyPrinter implements StmtVisitor, CodeVisitor
     }
 
 
+    @Override
     public void visit(WriteStmt s)
     {
         printer.print("write");
@@ -168,12 +201,14 @@ public class PrettyPrinter implements StmtVisitor, CodeVisitor
     }
 
 
+    @Override
     public void visit(CommentStmt s)
     {
         printer.println(s.toString());
     }
 
 
+    @Override
     public void visit(IfStmt s)
     {
         printer.print("if ( ");
@@ -191,6 +226,7 @@ public class PrettyPrinter implements StmtVisitor, CodeVisitor
     }
 
 
+    @Override
     public void visit(ReturnStmt s)
     {
         printer.print("return ");
@@ -205,6 +241,7 @@ public class PrettyPrinter implements StmtVisitor, CodeVisitor
     }
 
 
+    @Override
     public void visit(DeclStmt s)
     {
         printer.print(
@@ -237,30 +274,35 @@ public class PrettyPrinter implements StmtVisitor, CodeVisitor
     }
 
 
+    @Override
     public void visit(BinOpExpr e)
     {
         binop(e.operation.image, e.left, e.right, e.getPrecedence());
     }
 
 
+    @Override
     public void visit(Literal.BoolExpr e)
     {
         printer.print(e.toString());
     }
 
 
+    @Override
     public void visit(Literal.IntExpr e)
     {
         printer.print(e.toString());
     }
 
 
+    @Override
     public void visit(Literal.EnumVal e)
     {
         printer.print(e.toString());
     }
 
 
+    @Override
     public void visit(UnOpExpr e)
     {
         printer.print(e.operation.image);
@@ -277,6 +319,7 @@ public class PrettyPrinter implements StmtVisitor, CodeVisitor
     }
 
 
+    @Override
     public void visit(IndexExpr e)
     {
         e.expr.accept(this);
@@ -286,6 +329,7 @@ public class PrettyPrinter implements StmtVisitor, CodeVisitor
     }
 
 
+    @Override
     public void visit(FixedRangeExpr e)
     {
         inner(e.expr, e.getPrecedence());

@@ -32,9 +32,20 @@
 
 package avrora.jintgen.gen;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import avrora.cck.util.Util;
-import avrora.jintgen.jigir.*;
-import java.util.*;
+import avrora.jintgen.jigir.AssignStmt;
+import avrora.jintgen.jigir.DeclStmt;
+import avrora.jintgen.jigir.Expr;
+import avrora.jintgen.jigir.IfStmt;
+import avrora.jintgen.jigir.Stmt;
+import avrora.jintgen.jigir.StmtRebuilder;
+import avrora.jintgen.jigir.VarExpr;
 
 /**
  * @author Ben L. Titzer
@@ -132,6 +143,7 @@ public class DeadCodeEliminator
     }
 
 
+    @Override
     public List<Stmt> visitStmtList(List<Stmt> l, DefUseEnvironment denv)
     {
         Collections.reverse(l);
@@ -161,6 +173,7 @@ public class DeadCodeEliminator
     }
 
 
+    @Override
     public Stmt visit(IfStmt s, DefUseEnvironment denv)
     {
         DefUseEnvironment tenv = new DefUseEnvironment(denv);
@@ -179,6 +192,7 @@ public class DeadCodeEliminator
     }
 
 
+    @Override
     public Stmt visit(DeclStmt s, DefUseEnvironment denv)
     {
         if (denv.isDead(s.name.toString()))
@@ -191,12 +205,14 @@ public class DeadCodeEliminator
     }
 
 
+    @Override
     public Stmt visit(AssignStmt s, DefUseEnvironment denv)
     {
         throw Util.unimplemented();
     }
 
 
+    @Override
     public Expr visit(VarExpr e, DefUseEnvironment denv)
     {
         denv.use(e.variable.toString());

@@ -33,10 +33,10 @@
 package avrora.avrora.sim.platform;
 
 import avrora.avrora.core.Program;
+import avrora.avrora.sim.Simulation;
 import avrora.avrora.sim.clock.ClockDomain;
 import avrora.avrora.sim.mcu.Microcontroller;
 import avrora.avrora.sim.mcu.MicrocontrollerFactory;
-import avrora.avrora.sim.Simulation;
 
 /**
  * The <code>DefaultPlatform</code> class represents the simplest type of
@@ -108,6 +108,7 @@ public class DefaultPlatform extends Platform
          *            instance of the <code>Platform</code> interface for this
          *            platform
          */
+        @Override
         public Platform newPlatform(int id, Simulation sim, Program p)
         {
             ClockDomain cd = new ClockDomain(mainClockSpeed);
